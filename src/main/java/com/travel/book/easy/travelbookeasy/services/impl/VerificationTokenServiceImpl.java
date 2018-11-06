@@ -40,7 +40,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Value("${server.servlet.contextPath}")
     private String restUrl;
 
-    private final static String mailUrl = "https://flyeasy.app.link/";
+    private final static String mailUrl = "http://localhost:8080/api/v1/verification";
 
 
     @Override

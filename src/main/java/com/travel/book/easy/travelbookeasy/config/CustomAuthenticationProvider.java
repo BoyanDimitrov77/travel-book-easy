@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,21 +38,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     
     private PasswordEncoder passwordEncoder;
     
-   /* public CustomAuthenticationProvider(UserService userService,UserRoleService userRoleService,
+    public CustomAuthenticationProvider(UserService userService,UserRoleService userRoleService,
     		@Lazy PasswordEncoder  passwordEncoder){
     	this.userService = userService;
     	this.userRoleService = userRoleService;
     	this.passwordEncoder = passwordEncoder;
     	
-    }*/
+    }
     
-     public void setUserService(UserService userService) {
+     /*public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
      
      public void setUserRoleService(UserRoleService userRoleService) {
 		this.userRoleService = userRoleService;
-	}
+	}*/
      
    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
@@ -65,7 +66,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         
         if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password)){
-        	//throw new ApiException("Authorization Exception: Empty username and password.");
+        	throw new ApiException("Authorization Exception: Empty username and password.");
         }
         if (StringUtils.isEmpty(username)) { //facebook token auth
             /*org.springframework.social.facebook.api.User userProfile;
