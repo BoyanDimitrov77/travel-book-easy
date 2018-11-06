@@ -9,4 +9,8 @@ import com.travel.book.easy.travelbookeasy.db.model.User;
 public interface UserRepository extends JpaRepository<User,Long>{
 
 	User findByEmail(String email);
+	
+	User findById(long id);
+
+	User findByUserName(String userName);
 }
