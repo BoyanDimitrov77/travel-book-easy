@@ -4,5 +4,7 @@ import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
 
 public interface FlightService {
 
-	FlightDto createFligh(FlightDto flightDto, long companyId);
+	FlightDto createFlighRecord(FlightDto flightDto, long companyId);
+	
+	FlightDto getFlight(long flightId);
 }

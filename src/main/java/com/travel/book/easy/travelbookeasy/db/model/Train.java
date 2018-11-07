@@ -1,5 +1,6 @@
 package com.travel.book.easy.travelbookeasy.db.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +50,10 @@ public class Train {
 	private Date departDate;
 	
 	@Column(name="arrive_date")
-	private String arriveDate;
+	private Date arriveDate;
+	
+	@Column(name = "price")
+	private BigDecimal price;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "timestamp")

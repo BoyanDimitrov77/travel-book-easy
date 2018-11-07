@@ -11,31 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
-import com.travel.book.easy.travelbookeasy.services.interfaces.FlightService;
+import com.travel.book.easy.travelbookeasy.services.interfaces.BusService;
 
 @RestController
-@RequestMapping(value = "flight", produces = "application/json")
-public class FlightController {
+@RequestMapping(value = "bus", produces = "application/json")
+public class BusController {
 
 	@Autowired
-	private FlightService flightService;
-
-	@RequestMapping(method = RequestMethod.POST, value = "/create/createFlightRecord/{companyId}")
+	private BusService busService;
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/create/createBusRecord/{companyId}")
 	@Transactional
-	public ResponseEntity<FlightDto> createFlight(@PathVariable(name = "companyId") long companyId,
-			@RequestBody FlightDto flightDto, SecurityContextHolder context) {
-		FlightDto dto = flightService.createFlighRecord(flightDto, companyId);
+	public ResponseEntity<BusDto> createBusRecord(@PathVariable(name = "companyId") long companyId,
+			@RequestBody BusDto busDto, SecurityContextHolder context) {
+		BusDto dto = busService.createBusRecord(busDto, companyId);
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{flightId}")
-	public ResponseEntity<FlightDto> getFlight(@PathVariable(name = "flightId") long flightId) {
+	@RequestMapping(method = RequestMethod.GET, value = "/{busId}")
+	public ResponseEntity<BusDto> getBus(@PathVariable(name = "busId") long busId) {
 
-		FlightDto dto = flightService.getFlight(flightId);
+		BusDto dto = busService.getBus(busId);
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
-
+	
+	
 }

@@ -1,22 +1,19 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
-import com.travel.book.easy.travelbookeasy.api.dto.TravelClassDto;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
 import com.travel.book.easy.travelbookeasy.db.model.Flight;
-import com.travel.book.easy.travelbookeasy.db.model.TravelClass;
 import com.travel.book.easy.travelbookeasy.db.repository.CompanyRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.FlightRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.FlightService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
+import com.travel.book.easy.travelbookeasy.services.interfaces.TravelClassService;
 
 @Service
 public class FlightServiceImpl implements FlightService{
@@ -30,8 +27,11 @@ public class FlightServiceImpl implements FlightService{
 	@Autowired
 	private CompanyRepository companyRepository;
 	
+	@Autowired
+	private TravelClassService travelClassService;
+	
 	@Override
-	public FlightDto createFligh(FlightDto flightDto, long companyId) {
+	public FlightDto createFlighRecord(FlightDto flightDto, long companyId) {
 		
 		Optional<Company> company = companyRepository.findById(companyId);
 		
@@ -47,25 +47,23 @@ public class FlightServiceImpl implements FlightService{
 		flight.setDepartDate(flightDto.getDepartDate());
 		flight.setArriveDate(flightDto.getArriveDate());
 		flight.setPrice(flightDto.getPrice());
-		flight.setTracelClasses(createTravelClasses(flightDto.getTravelClassDtos()));
+		flight.setTracelClasses(travelClassService.createTravelClasses(flightDto.getTravelClassDtos()));
 		
-		Flight saveFlight = flightRepository.saveAndFlush(flight);
+		Flight savedFlight = flightRepository.saveAndFlush(flight);
 		
-		return FlightDto.of(saveFlight);
+		return FlightDto.of(savedFlight);
 	}
 
-	private List<TravelClass> createTravelClasses(List<TravelClassDto> travelClassDtos) {
+	@Override
+	public FlightDto getFlight(long flightId) {
 		
-		 return travelClassDtos.stream().map(dto ->{
-			TravelClass travelClass = new TravelClass();
-			travelClass.setMaxSeats(dto.getMaxSeats());
-			travelClass.setPrice(dto.getPrice());
-			travelClass.setTravelClass(dto.getTravelClass());
-
-			return travelClass;
-			
-		}).collect(Collectors.toList());
-
+		Optional<Flight> flight = flightRepository.findById(flightId);
+		
+		if(!flight.isPresent()) {
+			throw new ApiException("Flight not found");
+		}
+		
+		return FlightDto.of(flight.get());
 	}
 
 }
