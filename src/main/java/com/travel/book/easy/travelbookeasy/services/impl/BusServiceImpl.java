@@ -1,18 +1,22 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
+import com.travel.book.easy.travelbookeasy.api.dto.SearchFilterDto;
 import com.travel.book.easy.travelbookeasy.db.model.Bus;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
 import com.travel.book.easy.travelbookeasy.db.repository.BusRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.CompanyRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.BusService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
+import com.travel.book.easy.travelbookeasy.util.SearchUtil;
 
 @Service
 public class BusServiceImpl implements BusService {
@@ -59,6 +63,60 @@ public class BusServiceImpl implements BusService {
 		}
 
 		return BusDto.of(bus.get());
+	}
+
+	@Override
+	public List<BusDto> findAllBuses() {
+
+		return busRepository.findAllBuses().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<BusDto> searchBuses(SearchFilterDto searchFilterDto) {
+		if (SearchUtil.checkAllFilter(searchFilterDto)) {
+			return busRepository.findBusesByAllRequirements(searchFilterDto.getLocationFrom(),
+					searchFilterDto.getLocationTo(), searchFilterDto.getDate()).stream().map(b -> BusDto.of(b))
+					.collect(Collectors.toList());
+		} else if (SearchUtil.checkFitlerWitPriceWithoutRating(searchFilterDto)) {
+			return busRepository
+					.findBusesByLocationAndDateAndPriceWithoutRating(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithRatingWithoutPrice(searchFilterDto)) {
+			return busRepository
+					.findBusesByLocationAndDateAndRatingWithoutPrice(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithPriceAndRatingWithoutDate(searchFilterDto)) {
+			return busRepository
+					.findBusesByLocationAndPriceAndRatingWithoutDate(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithPriceWithoutDateAndRating(searchFilterDto)) {
+			return busRepository
+					.findBusesByLocationAndPriceWithoutDateAndRaiting(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithRatingWithoutDateAndPrice(searchFilterDto)) {
+			return busRepository
+					.findTrainByLocationAndRaitingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkoFilterOnlyWithPrice(searchFilterDto)) {
+			return busRepository.findBusesByPrice().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterOnlyRating(searchFilterDto)) {
+			return busRepository.findBusesByRaiting().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterOnlyLocation(searchFilterDto)) {
+			return busRepository.findBusesByLocation(searchFilterDto.getLocationFrom(), searchFilterDto.getLocationTo())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterLocationAndDateWithoutPriceAndRating(searchFilterDto)) {
+			return busRepository
+					.findBusesByLocationAndDateWithoutPriceAndRaiting(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+		}
+
+		return busRepository.findAllBuses().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 	}
 
 }

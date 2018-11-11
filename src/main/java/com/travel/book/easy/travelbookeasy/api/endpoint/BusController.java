@@ -1,5 +1,7 @@
 package com.travel.book.easy.travelbookeasy.api.endpoint;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
-import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
+import com.travel.book.easy.travelbookeasy.api.dto.SearchFilterDto;
 import com.travel.book.easy.travelbookeasy.services.interfaces.BusService;
 
 @RestController
@@ -38,6 +40,18 @@ public class BusController {
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/all")
+	public ResponseEntity<List<BusDto>> findAllTrains() {
+
+		List<BusDto> dto = busService.findAllBuses();
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/searchBuses")
+	public List<BusDto> getSearchBuses(@RequestBody SearchFilterDto searchFilterDto) {
+		return busService.searchBuses(searchFilterDto);
+	}
 	
 }

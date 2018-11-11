@@ -1,12 +1,15 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
+import com.travel.book.easy.travelbookeasy.api.dto.SearchFilterDto;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
 import com.travel.book.easy.travelbookeasy.db.model.Flight;
 import com.travel.book.easy.travelbookeasy.db.repository.CompanyRepository;
@@ -14,6 +17,7 @@ import com.travel.book.easy.travelbookeasy.db.repository.FlightRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.FlightService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.TravelClassService;
+import com.travel.book.easy.travelbookeasy.util.SearchUtil;
 
 @Service
 public class FlightServiceImpl implements FlightService{
@@ -64,6 +68,64 @@ public class FlightServiceImpl implements FlightService{
 		}
 		
 		return FlightDto.of(flight.get());
+	}
+
+	@Override
+	public List<FlightDto> findAllFlights() {
+
+		return flightRepository.findAllFlights().stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<FlightDto> searchFlights(SearchFilterDto searchFilterDto) {
+		if (SearchUtil.checkAllFilter(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByAllRequirements(searchFilterDto.getLocationFrom(), searchFilterDto.getLocationTo(),
+							searchFilterDto.getDate())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFitlerWitPriceWithoutRating(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByLocationAndDateAndPriceWithoutRating(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithRatingWithoutPrice(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByLocationAndDateAndRatingWithoutPrice(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithPriceAndRatingWithoutDate(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByLocationAndPriceAndRatingWithoutDate(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithPriceWithoutDateAndRating(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByLocationAndPriceWithoutDateAndRaiting(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithRatingWithoutDateAndPrice(searchFilterDto)) {
+			return flightRepository
+					.findTrainByLocationAndRaitingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkoFilterOnlyWithPrice(searchFilterDto)) {
+			return flightRepository.findFlightsByPrice().stream().map(fl -> FlightDto.of(fl))
+					.collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterOnlyRating(searchFilterDto)) {
+			return flightRepository.findFlightsByRaiting().stream().map(fl -> FlightDto.of(fl))
+					.collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterOnlyLocation(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByLocation(searchFilterDto.getLocationFrom(), searchFilterDto.getLocationTo()).stream()
+					.map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterLocationAndDateWithoutPriceAndRating(searchFilterDto)) {
+			return flightRepository
+					.findFlightsByLocationAndDateWithoutPriceAndRaiting(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+		}
+
+		return flightRepository.findAllFlights().stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
 	}
 
 }
