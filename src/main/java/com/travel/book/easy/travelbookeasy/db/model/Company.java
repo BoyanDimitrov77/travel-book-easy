@@ -30,8 +30,8 @@ public class Company {
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="rating")
-	private BigDecimal rating;
+	@Column(name="raiting")
+	private BigDecimal raiting;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="company_logo")

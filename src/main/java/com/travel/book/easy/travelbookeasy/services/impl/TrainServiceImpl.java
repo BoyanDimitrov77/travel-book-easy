@@ -1,11 +1,14 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
+import com.travel.book.easy.travelbookeasy.api.dto.SearchFilterDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TrainDto;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
 import com.travel.book.easy.travelbookeasy.db.model.Train;
@@ -14,6 +17,7 @@ import com.travel.book.easy.travelbookeasy.db.repository.TrainRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.TrainService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.TravelClassService;
+import com.travel.book.easy.travelbookeasy.util.SearchUtil;
 
 @Service
 public class TrainServiceImpl  implements TrainService{
@@ -66,6 +70,61 @@ public class TrainServiceImpl  implements TrainService{
 		return TrainDto.of(train.get());
 	}
 
-	
+	@Override
+	public List<TrainDto> findAllTrains() {
+
+		return trainRepository.findAllTrains().stream().map(t -> TrainDto.of(t)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<TrainDto> searchTrains(SearchFilterDto searchFilterDto) {
+
+		if (SearchUtil.checkAllFilter(searchFilterDto)) {
+			return trainRepository.findTrainsByAllRequirements(searchFilterDto.getLocationFrom(),
+					searchFilterDto.getLocationTo(), searchFilterDto.getDate()).stream().map(tr -> TrainDto.of(tr))
+					.collect(Collectors.toList());
+		} else if (SearchUtil.checkFitlerWitPriceWithoutRating(searchFilterDto)) {
+			return trainRepository
+					.findTrainsByLocationAndDateAndPriceWithoutRating(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithRatingWithoutPrice(searchFilterDto)) {
+			return trainRepository
+					.findTrainsByLocationAndDateAndRatingWithoutPrice(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithPriceAndRatingWithoutDate(searchFilterDto)) {
+			return trainRepository
+					.findTrainsByLocationAndPriceAndRatingWithoutDate(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithPriceWithoutDateAndRating(searchFilterDto)) {
+			return trainRepository
+					.findTrainsByLocationAndPriceWithoutDateAndRaiting(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterWithRatingWithoutDateAndPrice(searchFilterDto)) {
+			return trainRepository
+					.findTrainByLocationAndRaitingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo())
+					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkoFilterOnlyWithPrice(searchFilterDto)) {
+			return trainRepository.findTrainsByPrice().stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterOnlyRating(searchFilterDto)) {
+			return trainRepository.findTrainsByRaiting().stream().map(tr -> TrainDto.of(tr))
+					.collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterOnlyLocation(searchFilterDto)) {
+			return trainRepository
+					.findTrainsByLocation(searchFilterDto.getLocationFrom(), searchFilterDto.getLocationTo()).stream()
+					.map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		} else if (SearchUtil.checkFilterLocationAndDateWithoutPriceAndRating(searchFilterDto)) {
+			return trainRepository
+					.findTrainsByLocationAndDateWithoutPriceAndRaiting(searchFilterDto.getLocationFrom(),
+							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
+					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+		}
+
+		return trainRepository.findAllTrains().stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
+	}
 	
 }

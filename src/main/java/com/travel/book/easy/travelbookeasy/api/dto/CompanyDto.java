@@ -16,7 +16,7 @@ public class CompanyDto {
 
 	private String name;
 
-	private BigDecimal rating;
+	private BigDecimal raiting;
 
 	private PictureDto companyLogo;
 
@@ -24,16 +24,16 @@ public class CompanyDto {
 		super();
 	}
 
-	public CompanyDto(long id, String name, BigDecimal rating, PictureDto companyLogo) {
+	public CompanyDto(long id, String name, BigDecimal raiting, PictureDto companyLogo) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.rating = rating;
+		this.raiting = raiting;
 		this.companyLogo = companyLogo;
 	}
 
 	public static CompanyDto of(Company company) {
 		return TravelBookEasyApp.ofNullable(company, c -> CompanyDto.builder().id(c.getId()).name(c.getName())
-				.rating(c.getRating()).companyLogo(PictureDto.of(c.getCompanyLogo())).build());
+				.raiting(c.getRaiting()).companyLogo(PictureDto.of(c.getCompanyLogo())).build());
 	}
 }
