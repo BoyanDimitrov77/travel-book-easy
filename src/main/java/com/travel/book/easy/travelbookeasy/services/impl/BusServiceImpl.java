@@ -47,6 +47,7 @@ public class BusServiceImpl implements BusService {
 		bus.setLocationFrom(locationService.createLocation(busDto.getLocationFrom().getName()));
 		bus.setLocationTo(locationService.createLocation(busDto.getLocationTo().getName()));
 		bus.setPrice(busDto.getPrice());
+		bus.setMaxSeats(busDto.getMaxSeats());
 
 		Bus savedBus = busRepository.saveAndFlush(bus);
 

@@ -33,12 +33,14 @@ private long id;
 	
 	private BigDecimal price;
 
+	private int maxSeats;
+
 	public BusDto() {
 		super();
 	}
 
 	public BusDto(long id, CompanyDto company, String name, LocationDto locationFrom, LocationDto locationTo,
-			Date departDate, Date arriveDate, BigDecimal price) {
+			Date departDate, Date arriveDate, BigDecimal price, int maxSeats) {
 		super();
 		this.id = id;
 		this.company = company;
@@ -48,6 +50,7 @@ private long id;
 		this.departDate = departDate;
 		this.arriveDate = arriveDate;
 		this.price = price;
+		this.maxSeats = maxSeats;
 	}
 	
 	public static BusDto of(Bus bus) {
@@ -60,6 +63,7 @@ private long id;
 				.departDate(b.getDepartDate())
 				.arriveDate(b.getArriveDate())
 				.price(b.getPrice())
+				.maxSeats(b.getMaxSeats())
 				.build());
 	}
 	
