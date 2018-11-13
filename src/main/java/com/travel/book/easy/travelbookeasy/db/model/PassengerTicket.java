@@ -35,7 +35,7 @@ public class PassengerTicket {
 	@Column(name = "ticket_number")
 	private String ticketNumber;
 
-	@Column(name = "board_seat_no")
+	@Column(name = "seat_no")
 	private String boardSeatNumber;
 
 	@Temporal(TemporalType.TIMESTAMP)

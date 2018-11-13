@@ -50,7 +50,13 @@ public class Bus {
 	
 	@Column(name= "price")
 	private BigDecimal price;
-	
+
+	@Column(name = "max_seats")
+	private int maxSeats;
+
+	@Column(name = "count_seats")
+	private int countSeats;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "timestamp")
 	private Date timestamp;
