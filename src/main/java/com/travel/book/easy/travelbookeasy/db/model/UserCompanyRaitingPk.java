@@ -2,17 +2,28 @@ package com.travel.book.easy.travelbookeasy.db.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-public class UserCompanyRatingPk implements Serializable{
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Embeddable
+@Builder
+@Getter
+@Setter
+public class UserCompanyRaitingPk implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public UserCompanyRatingPk (User user, Company company) {
+	public UserCompanyRaitingPk() {}
+	
+	public UserCompanyRaitingPk (User user, Company company) {
 		this.user = user;
 		this.company = company;
 	}
@@ -43,7 +54,7 @@ public class UserCompanyRatingPk implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserCompanyRatingPk other = (UserCompanyRatingPk) obj;
+		UserCompanyRaitingPk other = (UserCompanyRaitingPk) obj;
 		if (company == null) {
 			if (other.company != null)
 				return false;
