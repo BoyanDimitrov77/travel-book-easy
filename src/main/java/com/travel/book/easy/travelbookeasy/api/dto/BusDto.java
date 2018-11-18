@@ -25,10 +25,10 @@ private long id;
 	
 	private LocationDto locationTo;
 	
-	@JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm", timezone = "UTC")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
 	private Date departDate;
 	
-	@JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm", timezone = "UTC")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
 	private Date arriveDate;
 	
 	private BigDecimal price;

@@ -51,7 +51,7 @@ public class FlightServiceImpl implements FlightService{
 		flight.setDepartDate(flightDto.getDepartDate());
 		flight.setArriveDate(flightDto.getArriveDate());
 		flight.setPrice(flightDto.getPrice());
-		flight.setTracelClasses(travelClassService.createTravelClasses(flightDto.getTravelClassDtos()));
+		flight.setTracelClasses(travelClassService.createTravelClasses(flightDto.getTravelClasses()));
 		
 		Flight savedFlight = flightRepository.saveAndFlush(flight);
 		

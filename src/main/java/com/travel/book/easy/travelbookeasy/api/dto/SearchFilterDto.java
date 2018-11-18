@@ -15,7 +15,7 @@ public class SearchFilterDto {
 
 	private String locationTo;
 
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "UTC")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
 	private Date date;
 
 	private Boolean sortByPrice;

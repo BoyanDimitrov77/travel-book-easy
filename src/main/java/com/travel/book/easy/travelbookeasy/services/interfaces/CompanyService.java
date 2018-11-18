@@ -1,6 +1,7 @@
 package com.travel.book.easy.travelbookeasy.services.interfaces;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.travel.book.easy.travelbookeasy.api.dto.CompanyDto;
 
@@ -11,4 +12,6 @@ public interface CompanyService {
 	CompanyDto raitingCompany(long userId, long companyId, BigDecimal raiting);
 	
 	CompanyDto getCompany(long companyId, long userId);
+
+	List<CompanyDto> getAllCompany();
 }

@@ -1,6 +1,7 @@
 package com.travel.book.easy.travelbookeasy.api.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class CompanyDto {
 	public static CompanyDto of(Company company) {
 		return TravelBookEasyApp.ofNullable(company, c -> CompanyDto.builder().id(c.getId()).name(c.getName())
 				.raiting(c.getRaiting()).companyLogo(PictureDto.of(c.getCompanyLogo()))
-				.userRaitings(company.getUserCompanyRaitings().stream().map(ur -> UserRaitingDto.of(ur)).collect(Collectors.toList()))
+				.userRaitings(company.getUserCompanyRaitings() != null ? company.getUserCompanyRaitings().stream().map(ur -> UserRaitingDto.of(ur)).collect(Collectors.toList()): new ArrayList())
 				.build());
 	}
 

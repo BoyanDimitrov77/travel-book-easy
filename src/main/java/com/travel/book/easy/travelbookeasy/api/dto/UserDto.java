@@ -3,11 +3,14 @@ package com.travel.book.easy.travelbookeasy.api.dto;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.travel.book.easy.travelbookeasy.db.model.User;
+import com.travel.book.easy.travelbookeasy.db.model.UserRole;
 import com.travel.book.easy.travelbookeasy.util.TravelBookEasyApp;
 
 import lombok.Builder;
@@ -54,9 +57,13 @@ public class UserDto implements Principal {
 		this.password = password;
 	}
 
+	@Getter
+	@Setter
+	private List<String> userRole;
+
     @Getter
     @Setter
-    @JsonFormat(pattern = "dd-MM-yyyy", timezone = "UTC")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date timestamp;
 
 /*    @Getter
@@ -91,6 +98,7 @@ public class UserDto implements Principal {
                 .userName(u.getUserName())
                 .fullName(u.getFullName())
                 .enabled(u.isEnabled())
+                .userRole(u.getUserRole().stream().map(ur->ur.getId().getRole().toString()).collect(Collectors.toList()))
                 .timestamp(u.getTimestamp())
                 .build());
     }
