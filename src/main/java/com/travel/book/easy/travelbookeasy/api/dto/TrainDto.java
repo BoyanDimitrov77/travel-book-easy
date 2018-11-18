@@ -25,22 +25,22 @@ private long id;
 	
 	private LocationDto locationTo;
 	
-	@JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm", timezone = "UTC")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
 	private Date departDate;
 	
-	@JsonFormat(pattern = "dd-MM-yyyy'T'HH:mm", timezone = "UTC")
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
 	private Date arriveDate;
 	
 	private BigDecimal price;
 	
-	private List<TravelClassDto> travelClassDtos;
+	private List<TravelClassDto> travelClasses;
 
 	public TrainDto() {
 		super();
 	}
 
 	public TrainDto(long id, CompanyDto company, String name, LocationDto locationFrom, LocationDto locationTo,
-			Date departDate, Date arriveDate, BigDecimal price, List<TravelClassDto> travelClassDtos) {
+			Date departDate, Date arriveDate, BigDecimal price, List<TravelClassDto> travelClasses) {
 		super();
 		this.id = id;
 		this.company = company;
@@ -50,7 +50,7 @@ private long id;
 		this.departDate = departDate;
 		this.arriveDate = arriveDate;
 		this.price = price;
-		this.travelClassDtos = travelClassDtos;
+		this.travelClasses = travelClasses;
 	}
 	
 	public static TrainDto of(Train train) {
@@ -63,7 +63,7 @@ private long id;
 				.departDate(t.getDepartDate())
 				.arriveDate(t.getArriveDate())
 				.price(t.getPrice())
-				.travelClassDtos(TravelClassDto.of(t.getTravelClasses()))
+				.travelClasses(TravelClassDto.of(t.getTravelClasses()))
 				.build());
 	}
 }

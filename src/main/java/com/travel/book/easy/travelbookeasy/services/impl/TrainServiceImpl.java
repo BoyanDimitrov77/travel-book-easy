@@ -51,7 +51,7 @@ public class TrainServiceImpl  implements TrainService{
 		train.setDepartDate(dto.getDepartDate());
 		train.setArriveDate(dto.getArriveDate());
 		train.setPrice(dto.getPrice());
-		train.setTravelClasses(travelClassService.createTravelClasses(dto.getTravelClassDtos()));
+		train.setTravelClasses(travelClassService.createTravelClasses(dto.getTravelClasses()));
 		
 		Train savedTrain = trainRepository.saveAndFlush(train);
 		

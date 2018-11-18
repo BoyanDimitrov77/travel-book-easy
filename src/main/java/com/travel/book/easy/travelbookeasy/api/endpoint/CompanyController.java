@@ -1,6 +1,7 @@
 package com.travel.book.easy.travelbookeasy.api.endpoint;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,5 +54,14 @@ public class CompanyController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/all")
+	public ResponseEntity<List<CompanyDto>> getAllCompanies(SecurityContextHolder contex) {
+
+		List<CompanyDto> dto = companyService.getAllCompany();
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+
+	}
+
 }

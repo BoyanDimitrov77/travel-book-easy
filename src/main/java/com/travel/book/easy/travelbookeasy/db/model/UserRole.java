@@ -22,4 +22,10 @@ public class UserRole implements Serializable {
     public void setId(UserRolePk id) {
         this.id = id;
     }
+
+	@Override
+	public String toString() {
+		return id.getRole().toString();
+	}
+
 }

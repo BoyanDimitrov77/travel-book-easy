@@ -95,4 +95,11 @@ public class CompanyServiceImpl implements CompanyService {
 		return CompanyDto.of(company.get(),isCurrentUserVotted.isPresent());
 	}
 
+	@Override
+	public List<CompanyDto> getAllCompany() {
+		List<Company> findAllCompany = companyRepository.findAll();
+
+		return findAllCompany.stream().map(c->CompanyDto.of(c)).collect(Collectors.toList());
+	}
+
 }
