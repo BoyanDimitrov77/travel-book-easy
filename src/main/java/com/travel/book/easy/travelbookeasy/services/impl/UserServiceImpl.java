@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 		userModel.setTimestamp(new Date());
 
 		savedUser = userRepository.save(userModel);
-		savedUser = addRole(savedUser, UserRoleEnum.USER);
+		savedUser = addRole(savedUser, UserRoleEnum.ROLE_USER);
 		
 		VerificationToken token = verificationTokenService.generateTokenForUser(savedUser);
 		String url = verificationTokenService.urlFromToken(token);

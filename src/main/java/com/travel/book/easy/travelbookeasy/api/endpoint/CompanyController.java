@@ -36,6 +36,7 @@ public class CompanyController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/ratingCompany/{companyId}")
+	@Transactional
 	public ResponseEntity<CompanyDto> raitingCompany(@PathVariable(name = "companyId") long companyId,
 			@RequestParam(value = "raiting") String raiting, SecurityContextHolder contex) {
 
