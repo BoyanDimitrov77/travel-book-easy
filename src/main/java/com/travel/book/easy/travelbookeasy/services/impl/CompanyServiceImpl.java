@@ -1,6 +1,7 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,14 +72,50 @@ public class CompanyServiceImpl implements CompanyService {
 		
 		userCompanyRaitingRepository.saveAndFlush(userCompanyRating);
 		
-		List<UserCompanyRaiting> ratingRecordsForCompany = userCompanyRaitingRepository.findAll().stream().filter(ucr->ucr.getId().getCompany().getId() == company.get().getId()).collect(Collectors.toList());
-		BigDecimal totalRating = ratingRecordsForCompany.stream().map(ucr->ucr.getRaiting()).reduce(BigDecimal.ZERO,BigDecimal::add);
+		BigDecimal calculateWeightedRating = calculateWeightedRating(company.get().getId());
 		
-		company.get().setRaiting(totalRating.divide(new BigDecimal(ratingRecordsForCompany.size())));
+		company.get().setRaiting(calculateWeightedRating);
 		
 		Company savedCompany = companyRepository.saveAndFlush(company.get());
 		
 		return CompanyDto.of(savedCompany);
+	}
+
+	private BigDecimal calculateWeightedRating(long companyId) {
+
+		// weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
+
+		// m
+		int minimumVotesRequired = 50;
+		List<UserCompanyRaiting> ratingRecordsForCompany = userCompanyRaitingRepository.findAll().stream()
+				.filter(ucr -> ucr.getId().getCompany().getId() == companyId).collect(Collectors.toList());
+		// v
+		int votes = ratingRecordsForCompany.size();
+		// R
+		BigDecimal averageRatingForMovie = ratingRecordsForCompany.stream().map(urc -> urc.getRaiting())
+				.reduce(BigDecimal.ZERO, BigDecimal::add).divide(new BigDecimal(votes));
+		// C
+		BigDecimal averageRatingForAllCompanies = companyRepository.findAll().stream().map(c -> {
+			if (c.getRaiting() != null) {
+				return c.getRaiting();
+			}
+			return BigDecimal.ZERO;
+
+		}).reduce(BigDecimal.ZERO, BigDecimal::add).divide(new BigDecimal(companyRepository.findAll().size()));
+
+		BigDecimal sumVotesAndMinimumVotesRequired = new BigDecimal(votes).add(new BigDecimal(minimumVotesRequired));
+
+		BigDecimal firstPart = new BigDecimal(votes).divide(sumVotesAndMinimumVotesRequired, 3, RoundingMode.HALF_UP)
+				.multiply(averageRatingForMovie);
+
+		BigDecimal secodPart = new BigDecimal(minimumVotesRequired)
+				.divide(sumVotesAndMinimumVotesRequired, 2, RoundingMode.HALF_UP)
+				.multiply(averageRatingForAllCompanies);
+
+		BigDecimal weightedRating = firstPart.add(secodPart);
+
+		return weightedRating;
+
 	}
 
 	@Override
