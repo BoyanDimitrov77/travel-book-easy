@@ -61,9 +61,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private LocationService locationService;
 
-/*	@Autowired
-	private GoogleDriveService googleDriveService;*/
-
 	public PasswordEncoder getPasswordEncoder(){
 		return this.passwordEncoder;
 	}
@@ -198,17 +195,6 @@ public class UserServiceImpl implements UserService {
 	public UserDto findUser(long userId) {
 		return UserDto.of(userRepository.findById(userId));
 	}
-
-	/*@Override
-	public String getAccessTokenGD() {
-		String accessTokenGD = null;
-		try {
-			accessTokenGD = googleDriveService.getAccessTokenGD();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return accessTokenGD;
-	}*/
 
 	@Override
 	public String chnageUserPassword(ChangeUserPasswordDto dto, long userId) {

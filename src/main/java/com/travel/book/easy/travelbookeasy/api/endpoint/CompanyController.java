@@ -26,7 +26,7 @@ public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
 
-	@RequestMapping(method = RequestMethod.POST, value = "/createCompanyRecord")
+	@RequestMapping(method = RequestMethod.POST, value = "/create/createCompanyRecord")
 	@Transactional
 	public ResponseEntity<CompanyDto> createAirlineRecord(@RequestBody CompanyDto airlineDto) {
 
