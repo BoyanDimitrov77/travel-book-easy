@@ -89,12 +89,6 @@ public class UserController {
 		return new ResponseEntity<>(userService.findUser(UserUtil.gerUserFromContext().getId()), HttpStatus.OK);
 	}
 
-	/*@RequestMapping(method = RequestMethod.GET, value = "/accessTokenGD")
-	public ResponseEntity<BasicDto<String>> getAccessTokenGD() {
-
-		return new ResponseEntity<>(new BasicDto<>(userService.getAccessTokenGD()), HttpStatus.OK);
-	}*/
-
 	@RequestMapping(method = RequestMethod.PUT, value = "/changePassword")
 	public ResponseEntity<BasicDto<String>> changePassword(@RequestBody ChangeUserPasswordDto changeUserPasswordDto,
 			SecurityContextHolder contex) {

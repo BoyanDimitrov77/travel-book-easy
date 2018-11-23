@@ -33,12 +33,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register/**").anonymous()
                 .antMatchers("/users/resetPassword").permitAll()
                 .antMatchers("/users/**").hasRole("USER")
-                /*.antMatchers("/flight/create/createFlightRecord/{companyId}").hasRole("ADMIN")
-                .antMatchers("/flight/**").hasAnyRole("USER")
-                .antMatchers("/bus/create/createBusRecord/{companyId}").hasRole("ADMIN")
-                .antMatchers("/bus/**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/train/create/createTrainRecord/{companyId}").hasRole("ADMIN")
-                .antMatchers("/train/**").hasRole("USER")*/
+                .antMatchers("/booking/**").hasRole("USER")
+                .antMatchers("/bus/create/**").hasRole("ADMIN")
+                .antMatchers("/bus/**").hasRole("USER")
+                .antMatchers("/company//create/**").hasRole("ADMIN")
+                .antMatchers("/company/**").hasRole("USER")
+                .antMatchers("/flight/create/**").hasRole("ADMIN")
+                .antMatchers("/flight/**").hasRole("USER")
+                .antMatchers("/hotel/create/**").hasRole("ADMIN")
+                .antMatchers("/hotel/uploadPictures").hasRole("ADMIN")
+                .antMatchers("/hotel/**").hasRole("USER")
+                .antMatchers("/train/create/**").hasRole("ADMIN")
+                .antMatchers("/train/**").hasRole("USER")
+                .antMatchers("/users/**").hasRole("USER")
     
                     .and()
                 .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
@@ -54,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .invalidateHttpSession(true)
                     .and()
                 .csrf().disable();
-        //TODO: Clear what is not needed like formLogin etc.
     }
 
     @Autowired
