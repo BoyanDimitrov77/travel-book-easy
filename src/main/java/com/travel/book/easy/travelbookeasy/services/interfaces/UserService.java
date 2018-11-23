@@ -1,6 +1,9 @@
 package com.travel.book.easy.travelbookeasy.services.interfaces;
 
+import java.io.IOException;
 import java.text.ParseException;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.travel.book.easy.travelbookeasy.api.dto.ChangeUserPasswordDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UpdateUserInformationDto;
@@ -24,7 +27,7 @@ public interface UserService {
 
 	void resetPasswrodRequest(String userEmail) throws CannotSendEmailException;
 
-	//UserDto uploadProfilePhoto(MultipartFile file, UserDto userDto )throws IOException;
+	UserDto uploadProfilePhoto(MultipartFile file, UserDto userDto )throws IOException;
 
 	UserDto updateUserInformation(UpdateUserInformationDto dto , long userId);
 

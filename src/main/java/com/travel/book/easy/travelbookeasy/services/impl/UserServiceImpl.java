@@ -1,18 +1,23 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.function.BiConsumer;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.ChangeUserPasswordDto;
+import com.travel.book.easy.travelbookeasy.api.dto.PictureDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UpdateUserInformationDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UserDto;
+import com.travel.book.easy.travelbookeasy.db.model.Picture;
 import com.travel.book.easy.travelbookeasy.db.model.User;
 import com.travel.book.easy.travelbookeasy.db.model.UserRole;
 import com.travel.book.easy.travelbookeasy.db.model.UserRoleEnum;
@@ -22,8 +27,10 @@ import com.travel.book.easy.travelbookeasy.db.repository.UserRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.UserRoleRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.MailService;
+import com.travel.book.easy.travelbookeasy.services.interfaces.PictureService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.UserService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.VerificationTokenService;
+import com.travel.book.easy.travelbookeasy.util.PictureUtil;
 
 import it.ozimov.springboot.mail.service.exception.CannotSendEmailException;
 
@@ -48,8 +55,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private MailService mailService;
 
-	/*@Autowired
-	private PictureService pictureService;*/
+	@Autowired
+	private PictureService pictureService;
 
 	@Autowired
 	private LocationService locationService;
@@ -150,7 +157,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	/*@Override
+	@Override
 	public UserDto uploadProfilePhoto(MultipartFile file, UserDto userDto) throws IOException {
 		User user = setUserProfilePicture(file, userDto, User::setProfilePicture);
 
@@ -161,13 +168,13 @@ public class UserServiceImpl implements UserService {
 			throws IOException {
 		PictureDto savePicure = pictureService.savePicure(PictureUtil.getImageFromMultipartFile(file),
 				userDto.getUserName());
-		User user = userRepository.findOne(userDto.getId());
+		User user = userRepository.findById(userDto.getId());
 		pictureSetter.accept(user, pictureService.getPictureById(savePicure.getId()));
 		User saveUser = userRepository.saveAndFlush(user);
 
 		return saveUser;
 
-	}*/
+	}
 
 	@Override
 	public UserDto updateUserInformation(UpdateUserInformationDto dto, long userId) {

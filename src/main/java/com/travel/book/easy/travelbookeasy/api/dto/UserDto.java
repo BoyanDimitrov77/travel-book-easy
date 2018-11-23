@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.travel.book.easy.travelbookeasy.db.model.User;
-import com.travel.book.easy.travelbookeasy.db.model.UserRole;
 import com.travel.book.easy.travelbookeasy.util.TravelBookEasyApp;
 
 import lombok.Builder;
@@ -67,18 +66,9 @@ public class UserDto implements Principal {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date timestamp;
 
-/*    @Getter
+    @Getter
     @Setter
-    private PictureDto profilePicture;*/
-
-	/*@Getter
-	@Setter
-	@JsonFormat(pattern = "dd-MM-yyyy", timezone = "UTC")
-	private Date birthDate;*/
-
-/*	@Getter
-	@Setter
-	private LocationDto location;*/
+    private PictureDto profilePicture;
 
     @Tolerate
 	public UserDto() {

@@ -1,5 +1,7 @@
 package com.travel.book.easy.travelbookeasy.api.endpoint;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,11 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.BasicDto;
 import com.travel.book.easy.travelbookeasy.api.dto.ChangeUserPasswordDto;
+import com.travel.book.easy.travelbookeasy.api.dto.PictureDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UpdateUserInformationDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UserDto;
 import com.travel.book.easy.travelbookeasy.services.interfaces.UserService;
@@ -46,7 +51,7 @@ public class UserController {
 
 	}
 
-	/*@RequestMapping(method = RequestMethod.POST, value = "/uploadProfilePhoto")
+	@RequestMapping(method = RequestMethod.POST, value = "/uploadProfilePhoto")
 	public ResponseEntity<PictureDto> uploadProfilePhoto(@RequestParam("file") MultipartFile file,
 			SecurityContextHolder context) {
 
@@ -59,7 +64,7 @@ public class UserController {
 		}
 
 		return new ResponseEntity<>(profilePicture, HttpStatus.OK);
-	}*/
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/updatePersonalInformation")
 	public ResponseEntity<UserDto> updatePersonalInformation(@RequestBody UpdateUserInformationDto dto,
@@ -98,8 +103,5 @@ public class UserController {
 
 		return new ResponseEntity<>(new BasicDto<>(response), HttpStatus.OK);
 	}
-	
-	
-	
-	
+
 }
