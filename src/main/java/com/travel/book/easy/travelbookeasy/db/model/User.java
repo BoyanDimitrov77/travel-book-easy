@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -59,16 +61,9 @@ public class User implements Serializable{
 	@OneToMany(fetch=FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "id.user")
 	private List<UserRole> userRole;
 
-/*	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "profile_picture")
-	private Picture profilePicture;*/
-
-/*	@Column(name = "birth_date")
-	private Date birthDate;*/
-
-/*	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "location_id")
-	private Location location;*/
+	private Picture profilePicture;
 
 	 @Override
 	    public boolean equals(Object u) {
