@@ -34,8 +34,8 @@ public class Company {
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="raiting")
-	private BigDecimal raiting;
+	@Column(name="rating")
+	private BigDecimal rating;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="company_logo")
@@ -46,9 +46,12 @@ public class Company {
 	private Date timestamp;
 
 	@OneToMany(mappedBy = "id.company")
-	List<UserCompanyRaiting> userCompanyRaitings;
+	List<UserCompanyRating> userCompanyRatings;
 
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "user_company_rating", joinColumns = @JoinColumn(name = "company_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> users;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="company")
+	private List<UserCompanyComment> userCompanyComments;
 }

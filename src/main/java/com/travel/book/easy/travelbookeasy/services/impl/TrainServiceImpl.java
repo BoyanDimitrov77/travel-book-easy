@@ -100,18 +100,18 @@ public class TrainServiceImpl  implements TrainService{
 					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterWithPriceWithoutDateAndRating(searchFilterDto)) {
 			return trainRepository
-					.findTrainsByLocationAndPriceWithoutDateAndRaiting(searchFilterDto.getLocationFrom(),
+					.findTrainsByLocationAndPriceWithoutDateAndRating(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo())
 					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterWithRatingWithoutDateAndPrice(searchFilterDto)) {
 			return trainRepository
-					.findTrainByLocationAndRaitingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
+					.findTrainByLocationAndRatingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo())
 					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 		} else if (SearchUtil.checkoFilterOnlyWithPrice(searchFilterDto)) {
 			return trainRepository.findTrainsByPrice().stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterOnlyRating(searchFilterDto)) {
-			return trainRepository.findTrainsByRaiting().stream().map(tr -> TrainDto.of(tr))
+			return trainRepository.findTrainsByRating().stream().map(tr -> TrainDto.of(tr))
 					.collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterOnlyLocation(searchFilterDto)) {
 			return trainRepository
@@ -119,7 +119,7 @@ public class TrainServiceImpl  implements TrainService{
 					.map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterLocationAndDateWithoutPriceAndRating(searchFilterDto)) {
 			return trainRepository
-					.findTrainsByLocationAndDateWithoutPriceAndRaiting(searchFilterDto.getLocationFrom(),
+					.findTrainsByLocationAndDateWithoutPriceAndRating(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
 					.stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 		}

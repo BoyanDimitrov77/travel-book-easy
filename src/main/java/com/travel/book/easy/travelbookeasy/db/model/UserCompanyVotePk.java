@@ -14,35 +14,34 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class UserCompanyRaitingPk implements Serializable{
-
+public class UserCompanyVotePk implements Serializable {
 	/**
-	 * 
-	 */
+	* 
+	*/
 	private static final long serialVersionUID = 1L;
+
+	public UserCompanyVotePk() {}
 	
-	public UserCompanyRaitingPk() {}
-	
-	public UserCompanyRaitingPk (User user, Company company) {
+	public UserCompanyVotePk(User user, UserCompanyComment userCompanyComment) {
+
 		this.user = user;
-		this.company = company;
+		this.userCompanyComment = userCompanyComment;
 	}
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id", updatable = false, insertable = false)
-	private User user;
-	
+	User user;
+
 	@ManyToOne
-	@JoinColumn(name = "company_id", updatable = false, insertable = false)
-	private Company company;
+	@JoinColumn(name = "user_company_comments_id", updatable = false, insertable = false)
+	UserCompanyComment userCompanyComment;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((userCompanyComment == null) ? 0 : userCompanyComment.hashCode());
 		return result;
 	}
 
@@ -54,19 +53,18 @@ public class UserCompanyRaitingPk implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserCompanyRaitingPk other = (UserCompanyRaitingPk) obj;
-		if (company == null) {
-			if (other.company != null)
-				return false;
-		} else if (!company.equals(other.company))
-			return false;
+		UserCompanyVotePk other = (UserCompanyVotePk) obj;
 		if (user == null) {
 			if (other.user != null)
 				return false;
 		} else if (!user.equals(other.user))
 			return false;
+		if (userCompanyComment == null) {
+			if (other.userCompanyComment != null)
+				return false;
+		} else if (!userCompanyComment.equals(other.userCompanyComment))
+			return false;
 		return true;
 	}
-	
-	
+
 }

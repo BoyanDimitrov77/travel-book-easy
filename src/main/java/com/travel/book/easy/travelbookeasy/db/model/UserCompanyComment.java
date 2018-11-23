@@ -1,7 +1,9 @@
 package com.travel.book.easy.travelbookeasy.db.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +31,7 @@ public class UserCompanyComment {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
-	private User User;
+	private User creator;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "company_id")
@@ -40,12 +43,14 @@ public class UserCompanyComment {
 	@Column(name = "count_likes")
 	private long likes;
 	
-	@Column(name = "count_dislikes")
+	@Column(name = "count_dislike")
 	private long dislikes;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "timestamp")
 	private Date timestamp;
-	
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.userCompanyComment")
+	private List<UserCompanyVote> userCompanyVotes;
 
 }
