@@ -95,24 +95,24 @@ public class BusServiceImpl implements BusService {
 					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterWithPriceWithoutDateAndRating(searchFilterDto)) {
 			return busRepository
-					.findBusesByLocationAndPriceWithoutDateAndRaiting(searchFilterDto.getLocationFrom(),
+					.findBusesByLocationAndPriceWithoutDateAndRating(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo())
 					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterWithRatingWithoutDateAndPrice(searchFilterDto)) {
 			return busRepository
-					.findTrainByLocationAndRaitingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
+					.findTrainByLocationAndRatingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo())
 					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		} else if (SearchUtil.checkoFilterOnlyWithPrice(searchFilterDto)) {
 			return busRepository.findBusesByPrice().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterOnlyRating(searchFilterDto)) {
-			return busRepository.findBusesByRaiting().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
+			return busRepository.findBusesByRating().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterOnlyLocation(searchFilterDto)) {
 			return busRepository.findBusesByLocation(searchFilterDto.getLocationFrom(), searchFilterDto.getLocationTo())
 					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterLocationAndDateWithoutPriceAndRating(searchFilterDto)) {
 			return busRepository
-					.findBusesByLocationAndDateWithoutPriceAndRaiting(searchFilterDto.getLocationFrom(),
+					.findBusesByLocationAndDateWithoutPriceAndRating(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
 					.stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 		}

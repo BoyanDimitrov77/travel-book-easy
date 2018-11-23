@@ -14,7 +14,7 @@ public interface BusRepository extends JpaRepository<Bus, Long>{
 	@Query("SELECT b FROM Bus b WHERE b.departDate>=NOW() ORDER BY b.departDate ")
 	List<Bus> findAllBuses();
 
-	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo AND Date(b.departDate) = Date(:toDate) ORDER BY b.price,b.company.raiting")
+	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo AND Date(b.departDate) = Date(:toDate) ORDER BY b.price,b.company.rating")
 	List<Bus> findBusesByAllRequirements(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 
@@ -22,32 +22,32 @@ public interface BusRepository extends JpaRepository<Bus, Long>{
 	List<Bus> findBusesByLocationAndDateAndPriceWithoutRating(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 
-	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo AND Date(b.departDate) = Date(:toDate) ORDER BY b.company.raiting")
+	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo AND Date(b.departDate) = Date(:toDate) ORDER BY b.company.rating")
 	List<Bus> findBusesByLocationAndDateAndRatingWithoutPrice(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 
-	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo ORDER BY b.price,b.company.raiting, b.departDate")
+	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo ORDER BY b.price,b.company.rating, b.departDate")
 	List<Bus> findBusesByLocationAndPriceAndRatingWithoutDate(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
 	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo ORDER BY b.price,b.departDate")
-	List<Bus> findBusesByLocationAndPriceWithoutDateAndRaiting(@Param("locationFrom") String locationFrom,
+	List<Bus> findBusesByLocationAndPriceWithoutDateAndRating(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
-	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo ORDER BY b.company.raiting, b.departDate")
-	List<Bus> findTrainByLocationAndRaitingWithoutDateAndPrice(@Param("locationFrom") String locationFrom,
+	@Query("SELECT b FROM Bus b where b.locationFrom.name =:locationFrom AND b.locationTo.name =:locationTo ORDER BY b.company.rating, b.departDate")
+	List<Bus> findTrainByLocationAndRatingWithoutDateAndPrice(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
 	@Query("SELECT b FROM Bus b where b.departDate>=NOW() ORDER BY b.price ASC")
 	List<Bus> findBusesByPrice();
 
-	@Query("SELECT b FROM Bus b where b.departDate>=NOW() ORDER BY b.company.raiting DESC")
-	List<Bus> findBusesByRaiting();
+	@Query("SELECT b FROM Bus b where b.departDate>=NOW() ORDER BY b.company.rating DESC")
+	List<Bus> findBusesByRating();
 
 	@Query("SELECT b FROM Bus b where b.locationFrom.name = :locationFrom AND b.locationTo.name = :locationTo ORDER BY b.departDate")
 	List<Bus> findBusesByLocation(@Param("locationFrom") String locationFrom, @Param("locationTo") String locationTo);
 
 	@Query("SELECT b FROM Bus b where b.locationFrom.name = :locationFrom AND b.locationTo.name = :locationTo AND Date(b.departDate) = Date(:toDate)")
-	List<Bus> findBusesByLocationAndDateWithoutPriceAndRaiting(@Param("locationFrom") String locationFrom,
+	List<Bus> findBusesByLocationAndDateWithoutPriceAndRating(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 }

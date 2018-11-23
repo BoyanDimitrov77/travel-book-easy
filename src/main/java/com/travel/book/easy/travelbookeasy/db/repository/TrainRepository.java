@@ -14,7 +14,7 @@ public interface TrainRepository extends JpaRepository<Train,Long>{
 	@Query("SELECT tr FROM Train tr WHERE tr.departDate>=NOW() ORDER BY tr.departDate ")
 	List<Train> findAllTrains();
 
-	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo AND Date(tr.departDate) = Date(:toDate) ORDER BY tr.price,tr.company.raiting")
+	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo AND Date(tr.departDate) = Date(:toDate) ORDER BY tr.price,tr.company.rating")
 	List<Train> findTrainsByAllRequirements(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 
@@ -22,33 +22,33 @@ public interface TrainRepository extends JpaRepository<Train,Long>{
 	List<Train> findTrainsByLocationAndDateAndPriceWithoutRating(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 
-	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo AND Date(tr.departDate) = Date(:toDate) ORDER BY tr.company.raiting")
+	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo AND Date(tr.departDate) = Date(:toDate) ORDER BY tr.company.rating")
 	List<Train> findTrainsByLocationAndDateAndRatingWithoutPrice(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 
-	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo ORDER BY tr.price,tr.company.raiting, tr.departDate")
+	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo ORDER BY tr.price,tr.company.rating, tr.departDate")
 	List<Train> findTrainsByLocationAndPriceAndRatingWithoutDate(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
 	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo ORDER BY tr.price,tr.departDate")
-	List<Train> findTrainsByLocationAndPriceWithoutDateAndRaiting(@Param("locationFrom") String locationFrom,
+	List<Train> findTrainsByLocationAndPriceWithoutDateAndRating(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
-	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo ORDER BY tr.company.raiting, tr.departDate")
-	List<Train> findTrainByLocationAndRaitingWithoutDateAndPrice(@Param("locationFrom") String locationFrom,
+	@Query("SELECT tr FROM Train tr where tr.locationFrom.name =:locationFrom AND tr.locationTo.name =:locationTo ORDER BY tr.company.rating, tr.departDate")
+	List<Train> findTrainByLocationAndRatingWithoutDateAndPrice(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
 	@Query("SELECT tr FROM Train tr where tr.departDate>=NOW() ORDER BY tr.price ASC")
 	List<Train> findTrainsByPrice();
 
-	@Query("SELECT tr FROM Train tr where tr.departDate>=NOW() ORDER BY tr.company.raiting DESC")
-	List<Train> findTrainsByRaiting();
+	@Query("SELECT tr FROM Train tr where tr.departDate>=NOW() ORDER BY tr.company.rating DESC")
+	List<Train> findTrainsByRating();
 
 	@Query("SELECT tr FROM Train tr where tr.locationFrom.name = :locationFrom AND tr.locationTo.name = :locationTo ORDER BY tr.departDate")
 	List<Train> findTrainsByLocation(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo);
 
 	@Query("SELECT tr FROM Train tr where tr.locationFrom.name = :locationFrom AND tr.locationTo.name = :locationTo AND Date(tr.departDate) = Date(:toDate)")
-	List<Train> findTrainsByLocationAndDateWithoutPriceAndRaiting(@Param("locationFrom") String locationFrom,
+	List<Train> findTrainsByLocationAndDateWithoutPriceAndRating(@Param("locationFrom") String locationFrom,
 			@Param("locationTo") String locationTo, @Param("toDate") Date toDate);
 }

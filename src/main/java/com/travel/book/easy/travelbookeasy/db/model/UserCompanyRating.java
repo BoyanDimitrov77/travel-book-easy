@@ -11,13 +11,13 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "user_company_raiting")
-public class UserCompanyRaiting {
+@Table(name = "user_company_rating")
+public class UserCompanyRating {
 
 	
 	@EmbeddedId
-	private UserCompanyRaitingPk id;
+	private UserCompanyRatingPk id;
 	
-	@Column(name = "raiting")
-	private BigDecimal raiting;
+	@Column(name = "rating")
+	private BigDecimal rating;
 }

@@ -37,11 +37,11 @@ public class CompanyController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/ratingCompany/{companyId}")
 	@Transactional
-	public ResponseEntity<CompanyDto> raitingCompany(@PathVariable(name = "companyId") long companyId,
-			@RequestParam(value = "raiting") String raiting, SecurityContextHolder contex) {
+	public ResponseEntity<CompanyDto> ratingCompany(@PathVariable(name = "companyId") long companyId,
+			@RequestParam(value = "rating") String rating, SecurityContextHolder contex) {
 
-		CompanyDto dto = companyService.raitingCompany(UserUtil.gerUserFromContext().getId(), companyId,
-				new BigDecimal(raiting));
+		CompanyDto dto = companyService.ratingCompany(UserUtil.gerUserFromContext().getId(), companyId,
+				new BigDecimal(rating));
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -62,6 +62,29 @@ public class CompanyController {
 		List<CompanyDto> dto = companyService.getAllCompany();
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/createComment/{companyId}")
+	@Transactional
+	public ResponseEntity<CompanyDto> createCompanyComment(@PathVariable(name = "companyId") long companyId,
+			@RequestParam("comment") String comment, SecurityContextHolder contex) {
+
+		CompanyDto commnetsCompany = companyService.commnetsCompany(UserUtil.gerUserFromContext().getId(), companyId,
+				comment);
+
+		return new ResponseEntity<>(commnetsCompany, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/voteComment/{commentId}")
+	@Transactional
+	public ResponseEntity<CompanyDto> voteComment(@PathVariable(name = "commentId") long commentId,
+			@RequestParam("isLike") String isLike, SecurityContextHolder contex) {
+
+		companyService.voteComment(UserUtil.gerUserFromContext().getId(), commentId, Boolean.parseBoolean(isLike));
+
+		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
 

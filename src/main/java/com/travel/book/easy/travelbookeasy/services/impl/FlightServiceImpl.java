@@ -100,19 +100,19 @@ public class FlightServiceImpl implements FlightService{
 					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterWithPriceWithoutDateAndRating(searchFilterDto)) {
 			return flightRepository
-					.findFlightsByLocationAndPriceWithoutDateAndRaiting(searchFilterDto.getLocationFrom(),
+					.findFlightsByLocationAndPriceWithoutDateAndRating(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo())
 					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterWithRatingWithoutDateAndPrice(searchFilterDto)) {
 			return flightRepository
-					.findTrainByLocationAndRaitingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
+					.findTrainByLocationAndRatingWithoutDateAndPrice(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo())
 					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
 		} else if (SearchUtil.checkoFilterOnlyWithPrice(searchFilterDto)) {
 			return flightRepository.findFlightsByPrice().stream().map(fl -> FlightDto.of(fl))
 					.collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterOnlyRating(searchFilterDto)) {
-			return flightRepository.findFlightsByRaiting().stream().map(fl -> FlightDto.of(fl))
+			return flightRepository.findFlightsByRating().stream().map(fl -> FlightDto.of(fl))
 					.collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterOnlyLocation(searchFilterDto)) {
 			return flightRepository
@@ -120,7 +120,7 @@ public class FlightServiceImpl implements FlightService{
 					.map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
 		} else if (SearchUtil.checkFilterLocationAndDateWithoutPriceAndRating(searchFilterDto)) {
 			return flightRepository
-					.findFlightsByLocationAndDateWithoutPriceAndRaiting(searchFilterDto.getLocationFrom(),
+					.findFlightsByLocationAndDateWithoutPriceAndRating(searchFilterDto.getLocationFrom(),
 							searchFilterDto.getLocationTo(), searchFilterDto.getDate())
 					.stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
 		}

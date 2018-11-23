@@ -19,40 +19,40 @@ public class CompanyDto {
 
 	private String name;
 
-	private BigDecimal raiting;
+	private BigDecimal rating;
 
 	private PictureDto companyLogo;
 
 	private Boolean isCurrentUserVoted;
 
-	private List<UserRaitingDto> userRaitings;
+	private List<UserCompanyCommentDto> comments;
 
 	public CompanyDto() {
 		super();
 	}
 
-	public CompanyDto(long id, String name, BigDecimal raiting, PictureDto companyLogo, Boolean isCurrentUserVoted, List<UserRaitingDto> userRaitings) {
+	public CompanyDto(long id, String name, BigDecimal rating, PictureDto companyLogo, Boolean isCurrentUserVoted, List<UserCompanyCommentDto> comments) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.raiting = raiting;
+		this.rating = rating;
 		this.companyLogo = companyLogo;
 		this.isCurrentUserVoted = isCurrentUserVoted;
-		this.userRaitings = userRaitings;
+		this.comments = comments;
 	}
 
 	public static CompanyDto of(Company company) {
 		return TravelBookEasyApp.ofNullable(company, c -> CompanyDto.builder().id(c.getId()).name(c.getName())
-				.raiting(c.getRaiting()).companyLogo(PictureDto.of(c.getCompanyLogo()))
-				.userRaitings(company.getUserCompanyRaitings() != null ? company.getUserCompanyRaitings().stream().map(ur -> UserRaitingDto.of(ur)).collect(Collectors.toList()): new ArrayList())
+				.rating(c.getRating()).companyLogo(PictureDto.of(c.getCompanyLogo()))
+				.comments(company.getUserCompanyComments() != null ? company.getUserCompanyComments().stream().map(ucc-> UserCompanyCommentDto.of(ucc)).collect(Collectors.toList()): new ArrayList<>())
 				.build());
 	}
 
 	public static CompanyDto of(Company company, Boolean isCurrentUserVoted) {
 		return TravelBookEasyApp.ofNullable(company, c -> CompanyDto.builder().id(c.getId()).name(c.getName())
-				.raiting(c.getRaiting()).companyLogo(PictureDto.of(c.getCompanyLogo()))
-				.userRaitings(company.getUserCompanyRaitings().stream().map(ur -> UserRaitingDto.of(ur)).collect(Collectors.toList()))
+				.rating(c.getRating()).companyLogo(PictureDto.of(c.getCompanyLogo()))
 				.isCurrentUserVoted(isCurrentUserVoted)
+				.comments(company.getUserCompanyComments() != null ? company.getUserCompanyComments().stream().map(ucc-> UserCompanyCommentDto.of(ucc)).collect(Collectors.toList()): new ArrayList<>())
 				.build());
 	}
 }

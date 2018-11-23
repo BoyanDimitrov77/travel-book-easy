@@ -2,6 +2,7 @@ package com.travel.book.easy.travelbookeasy.api.dto;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,7 +99,7 @@ public class UserDto implements Principal {
                 .userName(u.getUserName())
                 .fullName(u.getFullName())
                 .enabled(u.isEnabled())
-                .userRole(u.getUserRole().stream().map(ur->ur.getId().getRole().toString()).collect(Collectors.toList()))
+                .userRole(u.getUserRole() != null ? u.getUserRole().stream().map(ur->ur.getId().getRole().toString()).collect(Collectors.toList()) : new ArrayList<>())
                 .timestamp(u.getTimestamp())
                 .build());
     }
