@@ -13,9 +13,9 @@ public interface PaymentService {
 
 	Payment createPaymentRecord(User user);
 	
-	FlightBook payBookedFlight(BigDecimal amount, FlightBook flightBook, TravelClass travelClass);
+	FlightBook payBookedFlight(BigDecimal amount, FlightBook flightBook, TravelClass travelClass, String nonceFromTheClient);
 
-	BusBook payBookedBus(BigDecimal amount, BusBook busBook);
+	BusBook payBookedBus(BigDecimal amount, BusBook busBook, String nonceFromTheClient);
 
-	TrainBook payBookedTrain(BigDecimal amount, TrainBook trainBook, TravelClass travelClass);
+	TrainBook payBookedTrain(BigDecimal amount, TrainBook trainBook, TravelClass travelClass, String nonceFromTheClient);
 }
