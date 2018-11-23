@@ -175,7 +175,7 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 	@Override
-	public TransportBookingDto<FlightDto> payBookedFlight(BigDecimal amount, long flightBookId, long travelClassId) {
+	public TransportBookingDto<FlightDto> payBookedFlight(BigDecimal amount, long flightBookId, long travelClassId, String nonceFromTheClient) {
 		
 		Optional<FlightBook> flightBook = flightBookingRepository.findById(flightBookId);
 		
@@ -189,7 +189,7 @@ public class BookingServiceImpl implements BookingService{
 			throw new ApiException("Travel Class not found");
 		}
 		
-		FlightBook payBookedFlight = paymentService.payBookedFlight(amount, flightBook.get(), travelClass.get());
+		FlightBook payBookedFlight = paymentService.payBookedFlight(amount, flightBook.get(), travelClass.get(), nonceFromTheClient);
 		payBookedFlight.setStatus(BookStatus.CONFIRMED.toString());
 		
 		FlightBook savedFlightBook = flightBookingRepository.saveAndFlush(payBookedFlight);
@@ -284,14 +284,14 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 	@Override
-	public TransportBookingDto<BusDto> payBookedBus(BigDecimal amount, long busBookId) {
+	public TransportBookingDto<BusDto> payBookedBus(BigDecimal amount, long busBookId, String nonceFromTheClient) {
 		Optional<BusBook> busBook = busBookingRepository.findById(busBookId);
 
 		if (!busBook.isPresent()) {
 			throw new ApiException("Flight Book not found");
 		}
 
-		BusBook payBookedFlight = paymentService.payBookedBus(amount, busBook.get());
+		BusBook payBookedFlight = paymentService.payBookedBus(amount, busBook.get(), nonceFromTheClient);
 		payBookedFlight.setStatus(BookStatus.CONFIRMED.toString());
 
 		BusBook savedBusBook = busBookingRepository.saveAndFlush(payBookedFlight);
@@ -361,7 +361,7 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 	@Override
-	public TransportBookingDto<TrainDto> payBookedTrain(BigDecimal amount, long trainBookId, long travelClassId) {
+	public TransportBookingDto<TrainDto> payBookedTrain(BigDecimal amount, long trainBookId, long travelClassId, String nonceFromTheClient) {
 		Optional<TrainBook> trainBook = trainBookingRepository.findById(trainBookId);
 
 		if (!trainBook.isPresent()) {
@@ -374,7 +374,7 @@ public class BookingServiceImpl implements BookingService{
 			throw new ApiException("Travel Class not found");
 		}
 
-		TrainBook payBookedTrain = paymentService.payBookedTrain(amount, trainBook.get(), travelClass.get());
+		TrainBook payBookedTrain = paymentService.payBookedTrain(amount, trainBook.get(), travelClass.get(), nonceFromTheClient);
 		payBookedTrain.setStatus(BookStatus.CONFIRMED.toString());
 
 		TrainBook savedTrainBook = trainBookingRepository.saveAndFlush(payBookedTrain);

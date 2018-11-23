@@ -54,9 +54,10 @@ public class BookingController {
 	@Transactional
 	public ResponseEntity<TransportBookingDto<FlightDto>> payBookedFlight(@RequestParam(value = "amount") String amount,
 			@RequestParam(value = "flightBookId") String flightBookId,
-			@RequestParam(value = "travelClassId")String travelClassId) {
+			@RequestParam(value = "travelClassId")String travelClassId,
+			@RequestParam("nonceFromTheClient") String nonceFromTheClient) {
 
-		TransportBookingDto<FlightDto> payBookedFlight = bookingService.payBookedFlight(new BigDecimal(amount), Long.parseLong(flightBookId), Long.parseLong(travelClassId));
+		TransportBookingDto<FlightDto> payBookedFlight = bookingService.payBookedFlight(new BigDecimal(amount), Long.parseLong(flightBookId), Long.parseLong(travelClassId), nonceFromTheClient);
 		
 		return new ResponseEntity<>(payBookedFlight, HttpStatus.OK);
 	}
@@ -86,10 +87,10 @@ public class BookingController {
 	@RequestMapping(method = RequestMethod.POST, value = "/bookBus/payment")
 	@Transactional
 	public ResponseEntity<TransportBookingDto<BusDto>> payBookedBus(@RequestParam(value = "amount") String amount,
-			@RequestParam(value = "busBookingId") String busBookingId) {
+			@RequestParam(value = "busBookingId") String busBookingId, @RequestParam("nonceFromTheClient") String nonceFromTheClient) {
 
 		TransportBookingDto<BusDto> payBookedBus = bookingService.payBookedBus(new BigDecimal(amount),
-				Long.parseLong(busBookingId));
+				Long.parseLong(busBookingId), nonceFromTheClient);
 
 		return new ResponseEntity<>(payBookedBus, HttpStatus.OK);
 	}
@@ -121,10 +122,11 @@ public class BookingController {
 	@Transactional
 	public ResponseEntity<TransportBookingDto<TrainDto>> payBookedTrain(@RequestParam(value = "amount") String amount,
 			@RequestParam(value = "trainBookingId") String trainBookingId,
-			@RequestParam(value = "travelClassId") String travelClassId) {
+			@RequestParam(value = "travelClassId") String travelClassId,
+			@RequestParam("nonceFromTheClient") String nonceFromTheClient) {
 
 		TransportBookingDto<TrainDto> payBookedTrain = bookingService.payBookedTrain(new BigDecimal(amount),
-				Long.parseLong(trainBookingId), Long.parseLong(travelClassId));
+				Long.parseLong(trainBookingId), Long.parseLong(travelClassId), nonceFromTheClient);
 
 		return new ResponseEntity<>(payBookedTrain, HttpStatus.OK);
 	}
