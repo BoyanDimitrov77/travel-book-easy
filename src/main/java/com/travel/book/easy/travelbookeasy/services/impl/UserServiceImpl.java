@@ -25,6 +25,7 @@ import com.travel.book.easy.travelbookeasy.db.model.UserRolePk;
 import com.travel.book.easy.travelbookeasy.db.model.VerificationToken;
 import com.travel.book.easy.travelbookeasy.db.repository.UserRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.UserRoleRepository;
+import com.travel.book.easy.travelbookeasy.services.interfaces.GoogleDriveService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.MailService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.PictureService;
@@ -60,6 +61,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private LocationService locationService;
+
+	@Autowired
+	private GoogleDriveService googleDriveService;
 
 	public PasswordEncoder getPasswordEncoder(){
 		return this.passwordEncoder;
@@ -241,6 +245,17 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String getAccessTokenGD() {
+		String accessTokenGD = null;
+		try {
+			accessTokenGD = googleDriveService.getAccessTokenGD();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return accessTokenGD;
 	}
 
 }

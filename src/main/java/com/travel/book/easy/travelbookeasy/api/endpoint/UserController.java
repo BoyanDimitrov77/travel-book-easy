@@ -98,4 +98,10 @@ public class UserController {
 		return new ResponseEntity<>(new BasicDto<>(response), HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/accessTokenGD")
+	public ResponseEntity<BasicDto<String>> getAccessTokenGD() {
+
+		return new ResponseEntity<>(new BasicDto<>(userService.getAccessTokenGD()), HttpStatus.OK);
+	}
+
 }

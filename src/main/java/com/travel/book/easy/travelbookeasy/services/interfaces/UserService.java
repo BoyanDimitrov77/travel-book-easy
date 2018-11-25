@@ -38,4 +38,6 @@ public interface UserService {
 	boolean checkIfEmailExist(String email);
 
 	boolean checkIfUsernameExist(String username);
+
+	String getAccessTokenGD();
 }
