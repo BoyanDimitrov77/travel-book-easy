@@ -1,17 +1,22 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.CompanyDto;
+import com.travel.book.easy.travelbookeasy.api.dto.PictureDto;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
+import com.travel.book.easy.travelbookeasy.db.model.Picture;
 import com.travel.book.easy.travelbookeasy.db.model.User;
 import com.travel.book.easy.travelbookeasy.db.model.UserCompanyComment;
 import com.travel.book.easy.travelbookeasy.db.model.UserCompanyRating;
@@ -23,6 +28,8 @@ import com.travel.book.easy.travelbookeasy.db.repository.UserCompanyCommentsRepo
 import com.travel.book.easy.travelbookeasy.db.repository.UserCompanyRatingRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.UserRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.CompanyService;
+import com.travel.book.easy.travelbookeasy.services.interfaces.PictureService;
+import com.travel.book.easy.travelbookeasy.util.PictureUtil;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -38,6 +45,9 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private UserCompanyCommentsRepository userCompanyCommentsRepository;
+
+	@Autowired
+	private PictureService pictureService;
 
 	@Override
 	public CompanyDto createCompanyRecord(CompanyDto companyDto) {
@@ -210,6 +220,31 @@ public class CompanyServiceImpl implements CompanyService {
 		comment.get().getUserCompanyVotes().add(userCompanyVote);
 
 		userCompanyCommentsRepository.saveAndFlush(comment.get());
+
+	}
+
+	@Override
+	public CompanyDto uploadCompanyLogo(MultipartFile logo, long companyId) throws IOException {
+		Optional<Company> company = companyRepository.findById(companyId);
+
+		if (!company.isPresent()) {
+			throw new ApiException("Company not found");
+		}
+
+		Company savedCompany = setCompanyLogo(logo, company.get(), Company::setCompanyLogo);
+
+		return CompanyDto.of(savedCompany);
+	}
+
+	private Company setCompanyLogo(MultipartFile logo, Company company, BiConsumer<Company, Picture> logoSetter)
+			throws IOException {
+
+		PictureDto saveLogo = pictureService.savePicure(PictureUtil.getImageFromMultipartFile(logo), company.getName());
+		logoSetter.accept(company, pictureService.getPictureById(saveLogo.getId()));
+
+		Company savedCompany = companyRepository.saveAndFlush(company);
+
+		return savedCompany;
 
 	}
 
