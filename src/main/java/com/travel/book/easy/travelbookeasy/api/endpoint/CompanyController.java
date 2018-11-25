@@ -1,5 +1,6 @@
 package com.travel.book.easy.travelbookeasy.api.endpoint;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.CompanyDto;
 import com.travel.book.easy.travelbookeasy.services.interfaces.CompanyService;
 import com.travel.book.easy.travelbookeasy.util.UserUtil;
@@ -86,6 +89,21 @@ public class CompanyController {
 
 		return new ResponseEntity<>(HttpStatus.OK);
 
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/uploadCompanyLogo/{companyId}")
+	@Transactional
+	public ResponseEntity<CompanyDto> uploadAirlineLog(@RequestParam("file") MultipartFile file,
+			@PathVariable("companyId") long airlineId) {
+
+		CompanyDto companyDto = null;
+		try {
+			companyDto = companyService.uploadCompanyLogo(file, airlineId);
+		} catch (IOException e) {
+			throw new ApiException(e);
+		}
+
+		return new ResponseEntity<>(companyDto, HttpStatus.OK);
 	}
 
 }
