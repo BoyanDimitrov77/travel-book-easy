@@ -3,10 +3,9 @@ package com.travel.book.easy.travelbookeasy.services.interfaces;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
+import com.travel.book.easy.travelbookeasy.api.dto.HotelBookingDto;
 import com.travel.book.easy.travelbookeasy.api.dto.PassengerTicketDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TrainDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TransportBookingDto;
@@ -31,4 +30,8 @@ public interface BookingService {
 			List<PassengerTicketDto> passengerTicketDtos);
 
 	TransportBookingDto<TrainDto> payBookedTrain(BigDecimal amount, long trainBookId, long travelClassId, String nonceFromTheClient);
+
+	HotelBookingDto bookHotel(long hotelRoomId, long userId);
+
+	HotelBookingDto payHotel(long hotelBookId, BigDecimal amount, String nonceFromTheClient);
 }

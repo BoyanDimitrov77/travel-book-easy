@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
+import com.travel.book.easy.travelbookeasy.api.dto.HotelBookingDto;
 import com.travel.book.easy.travelbookeasy.api.dto.PassengerTicketDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TrainDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TransportBookingDto;
@@ -129,6 +130,29 @@ public class BookingController {
 				Long.parseLong(trainBookingId), Long.parseLong(travelClassId), nonceFromTheClient);
 
 		return new ResponseEntity<>(payBookedTrain, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/bookHotel/{hoteRoomId}")
+	@Transactional
+	public ResponseEntity<HotelBookingDto> bookHotel(@PathVariable("hoteRoomId") long hotelRoomId,
+			SecurityContextHolder context) {
+
+		HotelBookingDto dto = bookingService.bookHotel(hotelRoomId, UserUtil.gerUserFromContext().getId());
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/bookHotel/payment")
+	@Transactional
+	public ResponseEntity<HotelBookingDto> payHotel(@RequestParam(value = "hotelBookId") String hotelBookId,
+			@RequestParam(value = "amount") String amount,
+			@RequestParam("nonceFromTheClient") String nonceFromTheClient) {
+
+		HotelBookingDto dto = bookingService.payHotel(Long.parseLong(hotelBookId), new BigDecimal(amount),
+				nonceFromTheClient);
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+
 	}
 
 }

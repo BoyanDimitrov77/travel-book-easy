@@ -13,7 +13,11 @@ public interface HotelService {
 	HotelDto createHotel(HotelDto dto);
 	
 	HotelDto getHotel(long hotelId);
-	
-	List<PictureDto> uploadHotelPicutures(long hotelId, MultipartFile[] files) throws IOException ;
+
+	List<PictureDto> uploadHotelPicutures(long hotelId, MultipartFile[] files) throws IOException;
+
+	List<HotelDto> findHotelsByCurrentDestionation(long locationId);
+
+	List<HotelDto> findAllHotels();
 	
 }

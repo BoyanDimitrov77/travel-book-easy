@@ -59,4 +59,22 @@ public class HotelController {
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/availableHotels/{locationId}")
+	public ResponseEntity<List<HotelDto>> findAvailableHotelForCurrentDestination(
+			@PathVariable("locationId") long locationId) {
+
+		List<HotelDto> dtos = hotelService.findHotelsByCurrentDestionation(locationId);
+
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/all")
+	public ResponseEntity<List<HotelDto>> findAllHotel() {
+
+		List<HotelDto> dtos = hotelService.findAllHotels();
+
+		return new ResponseEntity<>(dtos, HttpStatus.OK);
+	}
+
+
 }

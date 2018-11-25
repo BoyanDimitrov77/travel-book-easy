@@ -17,6 +17,7 @@ import com.travel.book.easy.travelbookeasy.api.dto.HotelRoomDto;
 import com.travel.book.easy.travelbookeasy.api.dto.PictureDto;
 import com.travel.book.easy.travelbookeasy.db.model.Hotel;
 import com.travel.book.easy.travelbookeasy.db.model.HotelRoom;
+import com.travel.book.easy.travelbookeasy.db.model.Location;
 import com.travel.book.easy.travelbookeasy.db.model.Picture;
 import com.travel.book.easy.travelbookeasy.db.repository.HotelRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.HotelService;
@@ -107,6 +108,23 @@ public class HotelServiceImpl implements HotelService{
 		Hotel saveHotel = hotelRepository.saveAndFlush(hotel);
 
 		return saveHotel;
+	}
+
+	@Override
+	public List<HotelDto> findHotelsByCurrentDestionation(long locationId) {
+		Location location = locationService.findById(locationId);
+
+		List<Hotel> hotels = hotelRepository.findByLocation(location);
+
+		return hotels.stream().map(hotel -> HotelDto.of(hotel)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<HotelDto> findAllHotels() {
+
+		List<Hotel> hotels = hotelRepository.findAll();
+
+		return hotels.stream().map(h -> HotelDto.of(h)).collect(Collectors.toList());
 	}
 
 }

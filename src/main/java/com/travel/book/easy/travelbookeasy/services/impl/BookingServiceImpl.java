@@ -1,6 +1,7 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
+import com.travel.book.easy.travelbookeasy.api.dto.HotelBookingDto;
 import com.travel.book.easy.travelbookeasy.api.dto.PassengerTicketDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TrainDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TransportBookingDto;
@@ -19,6 +21,8 @@ import com.travel.book.easy.travelbookeasy.db.model.Bus;
 import com.travel.book.easy.travelbookeasy.db.model.BusBook;
 import com.travel.book.easy.travelbookeasy.db.model.Flight;
 import com.travel.book.easy.travelbookeasy.db.model.FlightBook;
+import com.travel.book.easy.travelbookeasy.db.model.HotelBook;
+import com.travel.book.easy.travelbookeasy.db.model.HotelRoom;
 import com.travel.book.easy.travelbookeasy.db.model.PassengerTicket;
 import com.travel.book.easy.travelbookeasy.db.model.Train;
 import com.travel.book.easy.travelbookeasy.db.model.TrainBook;
@@ -28,6 +32,8 @@ import com.travel.book.easy.travelbookeasy.db.repository.BusBookingRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.BusRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.FlightBookingRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.FlightRepository;
+import com.travel.book.easy.travelbookeasy.db.repository.HotelBookRepository;
+import com.travel.book.easy.travelbookeasy.db.repository.HotelRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.PassengerTicketRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.TrainBookRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.TrainRepository;
@@ -70,6 +76,12 @@ public class BookingServiceImpl implements BookingService{
 
 	@Autowired
 	private PassengerTicketRepository passengerTicketRepository;
+
+	@Autowired
+	private HotelBookRepository hotelBookRepository;
+
+	@Autowired
+	private HotelRepository hotelRepository;
 	
 	@Override
 	public TransportBookingDto<FlightDto> bookFlight(long flightId, long userId) {
@@ -380,6 +392,39 @@ public class BookingServiceImpl implements BookingService{
 		TrainBook savedTrainBook = trainBookingRepository.saveAndFlush(payBookedTrain);
 
 		return TransportBookingDto.of(savedTrainBook);
+	}
+
+	@Override
+	public HotelBookingDto bookHotel(long hotelRoomId, long userId) {
+		HotelRoom hotelRoom = hotelRepository.getHotelRoom(hotelRoomId);
+
+		if (hotelRoom == null) {
+			throw new ApiException("Hotel room not found");
+		}
+
+		User booker = userRepository.findById(userId);
+
+		HotelBook hotelBook = new HotelBook();
+		hotelBook.setHotelRoom(hotelRoom);
+		hotelBook.setUser(booker);
+		hotelBook.setPayment(paymentService.createPaymentRecord(booker));
+		hotelBook.setStatus(BookStatus.WAITING.toString());
+		hotelBook.setTimestamp(new Date());
+
+		HotelBook saveHotelBook = hotelBookRepository.saveAndFlush(hotelBook);
+
+		return HotelBookingDto.of(saveHotelBook);
+	}
+
+	@Override
+	public HotelBookingDto payHotel(long hotelBookId, BigDecimal amount, String nonceFromTheClient) {
+		HotelBook hotelBook = hotelBookRepository.findById(hotelBookId).get();
+
+		HotelBook hotelB = paymentService.payHotelBook(hotelBook, amount, nonceFromTheClient);
+
+		HotelBook saveHotelBook = hotelBookRepository.saveAndFlush(hotelB);
+
+		return HotelBookingDto.of(saveHotelBook);
 	}
 
 }

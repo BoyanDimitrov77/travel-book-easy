@@ -1,8 +1,11 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.db.model.Location;
 import com.travel.book.easy.travelbookeasy.db.repository.LocationRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
@@ -27,6 +30,18 @@ public class LocationServiceImpl implements LocationService {
 		}
 
 		return saveLocation == null ? location : saveLocation;
+	}
+
+	@Override
+	public Location findById(long id) {
+
+		Optional<Location> location = locationRepository.findById(id);
+
+		if (!location.isPresent()) {
+			throw new ApiException("Location not found");
+		}
+
+		return location.get();
 	}
 
 }
