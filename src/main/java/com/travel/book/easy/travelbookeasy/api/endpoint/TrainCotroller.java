@@ -53,4 +53,10 @@ public class TrainCotroller {
 	public List<TrainDto> getSearchTrains(@RequestBody SearchFilterDto searchFilterDto) {
 		return trainService.searchTrains(searchFilterDto);
 	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/update")
+	@Transactional
+	public TrainDto updateTrain(@RequestBody TrainDto trainDto) {
+		return trainService.updateTrain(trainDto);
+	}
 }

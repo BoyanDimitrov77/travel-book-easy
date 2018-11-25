@@ -19,5 +19,7 @@ public interface HotelService {
 	List<HotelDto> findHotelsByCurrentDestionation(long locationId);
 
 	List<HotelDto> findAllHotels();
+
+	HotelDto updateHotel(HotelDto hotelDto);
 	
 }

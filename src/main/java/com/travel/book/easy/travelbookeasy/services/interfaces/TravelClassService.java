@@ -8,4 +8,6 @@ import com.travel.book.easy.travelbookeasy.db.model.TravelClass;
 public interface TravelClassService {
 
 	List<TravelClass> createTravelClasses(List<TravelClassDto> travelClassDtos);
+
+	TravelClass updateTravelClass(TravelClassDto travelClassDto);
 }
