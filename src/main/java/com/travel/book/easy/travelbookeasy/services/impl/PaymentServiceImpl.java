@@ -1,13 +1,16 @@
 package com.travel.book.easy.travelbookeasy.services.impl;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
+import com.travel.book.easy.travelbookeasy.db.model.BookStatus;
 import com.travel.book.easy.travelbookeasy.db.model.BusBook;
 import com.travel.book.easy.travelbookeasy.db.model.FlightBook;
+import com.travel.book.easy.travelbookeasy.db.model.HotelBook;
 import com.travel.book.easy.travelbookeasy.db.model.Payment;
 import com.travel.book.easy.travelbookeasy.db.model.PaymentStatus;
 import com.travel.book.easy.travelbookeasy.db.model.TrainBook;
@@ -84,7 +87,6 @@ public class PaymentServiceImpl implements PaymentService{
 			throw new ApiException("Amount is not correct");
 		}
 
-		payment.setStatus(PaymentStatus.CONFIRMED.toString());
 		paymentRepository.saveAndFlush(payment);
 
 		return busBook;
@@ -109,10 +111,37 @@ public class PaymentServiceImpl implements PaymentService{
 			throw new ApiException("Amount is not correct");
 		}
 
-		payment.setStatus(PaymentStatus.CONFIRMED.toString());
 		paymentRepository.saveAndFlush(payment);
 
 		return trainBook;
+	}
+
+	@Override
+	public HotelBook payHotelBook(HotelBook hotelBook, BigDecimal amount, String nonceFromTheClient) {
+
+		Optional<Payment> payment = paymentRepository.findById(hotelBook.getPayment().getId());
+
+		if (!payment.isPresent()) {
+			throw new ApiException("Hotel book - payment not found");
+		}
+
+		BigDecimal hotelRoomPrice = hotelBook.getHotelRoom().getPrice();
+
+		if (hotelRoomPrice.compareTo(amount) == 0) {
+			if (braintreeService.createTransaction(amount, nonceFromTheClient)) {
+				payment.get().setAmount(amount);
+				payment.get().setStatus(PaymentStatus.CONFIRMED.toString());
+			} else {
+				payment.get().setStatus(PaymentStatus.CANCELLED.toString());
+			}
+
+		} else {
+			throw new ApiException("Amount is not correnct");
+		}
+
+		hotelBook.setStatus(BookStatus.CONFIRMED.toString());
+
+		return hotelBook;
 	}
 
 }

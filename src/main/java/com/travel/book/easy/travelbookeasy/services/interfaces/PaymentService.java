@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.travel.book.easy.travelbookeasy.db.model.BusBook;
 import com.travel.book.easy.travelbookeasy.db.model.FlightBook;
+import com.travel.book.easy.travelbookeasy.db.model.HotelBook;
 import com.travel.book.easy.travelbookeasy.db.model.Payment;
 import com.travel.book.easy.travelbookeasy.db.model.TrainBook;
 import com.travel.book.easy.travelbookeasy.db.model.TravelClass;
@@ -18,4 +19,6 @@ public interface PaymentService {
 	BusBook payBookedBus(BigDecimal amount, BusBook busBook, String nonceFromTheClient);
 
 	TrainBook payBookedTrain(BigDecimal amount, TrainBook trainBook, TravelClass travelClass, String nonceFromTheClient);
+
+	HotelBook payHotelBook(HotelBook hotelBook, BigDecimal amount, String nonceFromTheClient);
 }
