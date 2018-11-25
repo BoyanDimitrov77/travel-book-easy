@@ -51,8 +51,14 @@ public class FlightController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/searchFlights")
-	public List<FlightDto> getSearchTrains(@RequestBody SearchFilterDto searchFilterDto) {
+	public List<FlightDto> getSearchFlight(@RequestBody SearchFilterDto searchFilterDto) {
 		return flightService.searchFlights(searchFilterDto);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/update")
+	@Transactional
+	public FlightDto updateFlight(@RequestBody FlightDto flightDto) {
+		return flightService.updateFlight(flightDto);
 	}
 
 }

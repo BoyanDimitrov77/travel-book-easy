@@ -120,4 +120,42 @@ public class BusServiceImpl implements BusService {
 		return busRepository.findAllBuses().stream().map(b -> BusDto.of(b)).collect(Collectors.toList());
 	}
 
+	@Override
+	public BusDto updateBus(BusDto busDto) {
+		Optional<Bus> bus = busRepository.findById(busDto.getId());
+
+		if (!bus.isPresent()) {
+			throw new ApiException("Bus not found");
+		}
+
+		if (busDto.getName() != null) {
+			bus.get().setName(busDto.getName());
+		}
+		if (busDto.getCompany() != null && busDto.getCompany().getId() != 0) {
+			bus.get().setCompany(companyRepository.getOne(busDto.getCompany().getId()));
+		}
+		if (busDto.getLocationFrom().getName() != null) {
+			bus.get().setLocationFrom(locationService.createLocation(busDto.getLocationFrom().getName()));
+		}
+		if (busDto.getLocationTo().getName() != null) {
+			bus.get().setLocationTo(locationService.createLocation(busDto.getLocationTo().getName()));
+		}
+		if (busDto.getDepartDate() != null) {
+			bus.get().setDepartDate(busDto.getDepartDate());
+		}
+		if (busDto.getArriveDate() != null) {
+			bus.get().setArriveDate(busDto.getArriveDate());
+		}
+		if (busDto.getPrice() != null) {
+			bus.get().setPrice(busDto.getPrice());
+		}
+		if (busDto.getMaxSeats() != 0) {
+			bus.get().setMaxSeats(busDto.getMaxSeats());
+		}
+
+		Bus saveUpdateBus = busRepository.saveAndFlush(bus.get());
+
+		return BusDto.of(saveUpdateBus);
+	}
+
 }

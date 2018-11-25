@@ -53,5 +53,11 @@ public class BusController {
 	public List<BusDto> getSearchBuses(@RequestBody SearchFilterDto searchFilterDto) {
 		return busService.searchBuses(searchFilterDto);
 	}
-	
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/update")
+	@Transactional
+	public BusDto updateBus(@RequestBody BusDto busDto) {
+		return busService.updateBus(busDto);
+	}
+
 }

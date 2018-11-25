@@ -20,6 +20,7 @@ import com.travel.book.easy.travelbookeasy.db.model.HotelRoom;
 import com.travel.book.easy.travelbookeasy.db.model.Location;
 import com.travel.book.easy.travelbookeasy.db.model.Picture;
 import com.travel.book.easy.travelbookeasy.db.repository.HotelRepository;
+import com.travel.book.easy.travelbookeasy.db.repository.HotelRoomRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.HotelService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.PictureService;
@@ -36,7 +37,10 @@ public class HotelServiceImpl implements HotelService{
 	
 	@Autowired
 	private PictureService pictureService;
-	
+
+	@Autowired
+	private HotelRoomRepository hotelRoomRepository;
+
 	@Override
 	public HotelDto createHotel(HotelDto dto) {
 		
@@ -125,6 +129,55 @@ public class HotelServiceImpl implements HotelService{
 		List<Hotel> hotels = hotelRepository.findAll();
 
 		return hotels.stream().map(h -> HotelDto.of(h)).collect(Collectors.toList());
+	}
+
+	@Override
+	public HotelDto updateHotel(HotelDto hotelDto) {
+
+		Optional<Hotel> hotel = hotelRepository.findById(hotelDto.getId());
+
+		if (!hotel.isPresent()) {
+			throw new ApiException("Hotel not found");
+		}
+
+		if (hotelDto.getDescription() != null) {
+			hotel.get().setDescription(hotelDto.getDescription());
+		}
+		if (hotelDto.getName() != null) {
+			hotel.get().setHotelName(hotelDto.getName());
+		}
+		if (hotelDto.getLocation().getName() != null) {
+			hotel.get().setLocation(locationService.createLocation(hotelDto.getName()));
+		}
+		if (hotelDto.getHotelRooms() != null) {
+			hotel.get().setHotelRooms(updateHotelRooms(hotelDto.getHotelRooms()));
+		}
+
+		Hotel saveUpdateHotel = hotelRepository.saveAndFlush(hotel.get());
+
+		return HotelDto.of(saveUpdateHotel);
+	}
+
+	private List<HotelRoom> updateHotelRooms(List<HotelRoomDto> hotelRooms) {
+
+		return hotelRooms.stream().map(hotelRoom -> {
+			Optional<HotelRoom> hr = hotelRoomRepository.findById(hotelRoom.getId());
+
+			if (!hr.isPresent()) {
+				throw new ApiException("Hotel room not found");
+			}
+
+			if (hotelRoom.getPrice() != null) {
+				hr.get().setPrice(hotelRoom.getPrice());
+			}
+
+			if (hotelRoom.getTypeRoom() != null) {
+				hr.get().setTypeRoom(hotelRoom.getTypeRoom());
+			}
+
+			return hr.get();
+
+		}).collect(Collectors.toList());
 	}
 
 }

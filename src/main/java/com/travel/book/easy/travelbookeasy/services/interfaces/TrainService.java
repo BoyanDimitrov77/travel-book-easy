@@ -14,4 +14,6 @@ public interface TrainService {
 	List<TrainDto> findAllTrains();
 
 	List<TrainDto> searchTrains(SearchFilterDto searchFilterDto);
+
+	TrainDto updateTrain(TrainDto trainDto);
 }

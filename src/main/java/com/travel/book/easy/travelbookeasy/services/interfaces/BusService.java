@@ -14,4 +14,6 @@ public interface BusService {
 	List<BusDto> findAllBuses();
 
 	List<BusDto> searchBuses(SearchFilterDto searchFilterDto);
+
+	BusDto updateBus(BusDto busDto);
 }

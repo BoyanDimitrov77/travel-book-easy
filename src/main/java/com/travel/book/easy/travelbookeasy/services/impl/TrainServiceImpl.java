@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.SearchFilterDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TrainDto;
+import com.travel.book.easy.travelbookeasy.api.dto.TravelClassDto;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
 import com.travel.book.easy.travelbookeasy.db.model.Train;
+import com.travel.book.easy.travelbookeasy.db.model.TravelClass;
 import com.travel.book.easy.travelbookeasy.db.repository.CompanyRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.TrainRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.LocationService;
@@ -126,5 +128,54 @@ public class TrainServiceImpl  implements TrainService{
 
 		return trainRepository.findAllTrains().stream().map(tr -> TrainDto.of(tr)).collect(Collectors.toList());
 	}
-	
+
+	@Override
+	public TrainDto updateTrain(TrainDto trainDto) {
+		Optional<Train> train = trainRepository.findById(trainDto.getId());
+
+		if (!train.isPresent()) {
+			throw new ApiException("Train not found");
+		}
+
+		if (trainDto.getName() != null) {
+			train.get().setName(trainDto.getName());
+		}
+		if (trainDto.getCompany() != null && trainDto.getCompany().getId() != 0) {
+			train.get().setCompany(companyRepository.getOne(trainDto.getCompany().getId()));
+		}
+		if (trainDto.getLocationFrom().getName() != null) {
+			train.get().setLocationFrom(locationService.createLocation(trainDto.getLocationFrom().getName()));
+		}
+		if (trainDto.getLocationTo().getName() != null) {
+			train.get().setLocationTo(locationService.createLocation(trainDto.getLocationTo().getName()));
+		}
+		if (trainDto.getDepartDate() != null) {
+			train.get().setDepartDate(trainDto.getDepartDate());
+		}
+		if (trainDto.getArriveDate() != null) {
+			train.get().setArriveDate(trainDto.getArriveDate());
+		}
+		if (trainDto.getPrice() != null) {
+			train.get().setPrice(trainDto.getPrice());
+		}
+		if (trainDto.getTravelClasses() != null) {
+			train.get().setTravelClasses(updateTravelClasses(trainDto.getTravelClasses()));
+		}
+
+		Train saveUpdateTrain = trainRepository.saveAndFlush(train.get());
+
+		return TrainDto.of(saveUpdateTrain);
+	}
+
+	private List<TravelClass> updateTravelClasses(List<TravelClassDto> travelClasses) {
+
+		return travelClasses.stream().map(travelClass -> {
+
+			TravelClass updateTravelClass = travelClassService.updateTravelClass(travelClass);
+
+			return updateTravelClass;
+
+		}).collect(Collectors.toList());
+	}
+
 }

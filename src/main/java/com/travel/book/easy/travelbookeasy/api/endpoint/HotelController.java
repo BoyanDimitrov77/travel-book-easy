@@ -76,5 +76,13 @@ public class HotelController {
 		return new ResponseEntity<>(dtos, HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.PUT, value = "/update")
+	@Transactional
+	public ResponseEntity<HotelDto> updateHotel(@RequestBody HotelDto hotelDto) {
+
+		HotelDto updateHotel = hotelService.updateHotel(hotelDto);
+
+		return new ResponseEntity<>(updateHotel, HttpStatus.OK);
+	}
 
 }

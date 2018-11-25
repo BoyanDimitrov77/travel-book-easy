@@ -14,4 +14,6 @@ public interface FlightService {
 	List<FlightDto> findAllFlights();
 
 	List<FlightDto> searchFlights(SearchFilterDto searchFilterDto);
+
+	FlightDto updateFlight(FlightDto flightDto);
 }

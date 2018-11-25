@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
 import com.travel.book.easy.travelbookeasy.api.dto.SearchFilterDto;
+import com.travel.book.easy.travelbookeasy.api.dto.TravelClassDto;
 import com.travel.book.easy.travelbookeasy.db.model.Company;
 import com.travel.book.easy.travelbookeasy.db.model.Flight;
+import com.travel.book.easy.travelbookeasy.db.model.TravelClass;
 import com.travel.book.easy.travelbookeasy.db.repository.CompanyRepository;
 import com.travel.book.easy.travelbookeasy.db.repository.FlightRepository;
 import com.travel.book.easy.travelbookeasy.services.interfaces.FlightService;
@@ -126,6 +128,56 @@ public class FlightServiceImpl implements FlightService{
 		}
 
 		return flightRepository.findAllFlights().stream().map(fl -> FlightDto.of(fl)).collect(Collectors.toList());
+	}
+
+	@Override
+	public FlightDto updateFlight(FlightDto flightDto) {
+
+		Optional<Flight> flight = flightRepository.findById(flightDto.getId());
+
+		if (!flight.isPresent()) {
+			throw new ApiException("Flight not found");
+		}
+
+		if (flightDto.getName() != null) {
+			flight.get().setName(flightDto.getName());
+		}
+		if (flightDto.getCompany() != null && flightDto.getCompany().getId() != 0) {
+			flight.get().setCompany(companyRepository.getOne(flightDto.getCompany().getId()));
+		}
+		if (flightDto.getLocationFrom().getName() != null) {
+			flight.get().setLocationFrom(locationService.createLocation(flightDto.getLocationFrom().getName()));
+		}
+		if (flightDto.getLocationTo().getName() != null) {
+			flight.get().setLocationTo(locationService.createLocation(flightDto.getLocationTo().getName()));
+		}
+		if (flightDto.getDepartDate() != null) {
+			flight.get().setDepartDate(flightDto.getDepartDate());
+		}
+		if (flightDto.getArriveDate() != null) {
+			flight.get().setArriveDate(flightDto.getArriveDate());
+		}
+		if (flightDto.getPrice() != null) {
+			flight.get().setPrice(flightDto.getPrice());
+		}
+		if(flightDto.getTravelClasses() != null ) {
+			flight.get().setTracelClasses(updateTravelClasses(flightDto.getTravelClasses()));
+		}
+
+		Flight saveUpdateFlight = flightRepository.saveAndFlush(flight.get());
+
+		return FlightDto.of(saveUpdateFlight);
+	}
+
+	private List<TravelClass> updateTravelClasses(List<TravelClassDto> travelClasses) {
+
+		return travelClasses.stream().map(travelClass -> {
+
+			TravelClass updateTravelClass = travelClassService.updateTravelClass(travelClass);
+
+			return updateTravelClass;
+
+		}).collect(Collectors.toList());
 	}
 
 }
