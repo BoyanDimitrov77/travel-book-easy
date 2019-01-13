@@ -62,6 +62,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			if (user == null) {
 				throw new BadCredentialsException("Username not found.");
 			}
+			if(!user.isEnabled()) {
+				throw new BadCredentialsException("User is not acivated account.");
+			}
 
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new BadCredentialsException("Wrong password.");

@@ -34,4 +34,6 @@ public interface BookingService {
 	HotelBookingDto bookHotel(long hotelRoomId, long userId);
 
 	HotelBookingDto payHotel(long hotelBookId, BigDecimal amount, String nonceFromTheClient);
+
+	List<TransportBookingDto<FlightDto>> findAllUserBooking(long userId);
 }

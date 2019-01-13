@@ -427,4 +427,18 @@ public class BookingServiceImpl implements BookingService{
 		return HotelBookingDto.of(saveHotelBook);
 	}
 
+	@Override
+	public List<TransportBookingDto<FlightDto>> findAllUserBooking(long userId) {
+
+		User booker = userRepository.findById(userId);
+
+		if (booker == null) {
+			throw new ApiException("User not found");
+		}
+
+		List<FlightBook> findByBooker = flightBookingRepository.findByBooker(booker);
+
+		return findByBooker.stream().map(fb -> TransportBookingDto.of(fb)).collect(Collectors.toList());
+	}
+
 }

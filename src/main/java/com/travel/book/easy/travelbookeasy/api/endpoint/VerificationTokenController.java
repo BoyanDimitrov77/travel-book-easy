@@ -22,7 +22,7 @@ public class VerificationTokenController {
     private VerificationTokenService verificationTokenService;
 
     @RequestMapping(path = "/{token}", method = RequestMethod.GET)
-    public ResponseEntity<UserDto> verifyToken(@PathVariable("token") String token) {
+    public ResponseEntity<String> verifyToken(@PathVariable("token") String token) {
         UserDto result = null;
         try {
             result = verificationTokenService.verifyToken(token);
@@ -30,7 +30,7 @@ public class VerificationTokenController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>("Your account is activated!", HttpStatus.OK);
     }
 
 

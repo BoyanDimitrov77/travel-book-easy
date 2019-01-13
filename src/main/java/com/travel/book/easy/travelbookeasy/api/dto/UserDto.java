@@ -89,6 +89,7 @@ public class UserDto implements Principal {
                 .userName(u.getUserName())
                 .fullName(u.getFullName())
                 .enabled(u.isEnabled())
+                .profilePicture(PictureDto.of(u.getProfilePicture()))
                 .userRole(u.getUserRole() != null ? u.getUserRole().stream().map(ur->ur.getId().getRole().toString()).collect(Collectors.toList()) : new ArrayList<>())
                 .timestamp(u.getTimestamp())
                 .build());

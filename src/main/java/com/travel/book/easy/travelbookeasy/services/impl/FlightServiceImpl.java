@@ -145,10 +145,10 @@ public class FlightServiceImpl implements FlightService{
 		if (flightDto.getCompany() != null && flightDto.getCompany().getId() != 0) {
 			flight.get().setCompany(companyRepository.getOne(flightDto.getCompany().getId()));
 		}
-		if (flightDto.getLocationFrom().getName() != null) {
+		if (flightDto.getLocationFrom() !=null && flightDto.getLocationFrom().getName() != null) {
 			flight.get().setLocationFrom(locationService.createLocation(flightDto.getLocationFrom().getName()));
 		}
-		if (flightDto.getLocationTo().getName() != null) {
+		if ( flightDto.getLocationTo() != null && flightDto.getLocationTo().getName() != null) {
 			flight.get().setLocationTo(locationService.createLocation(flightDto.getLocationTo().getName()));
 		}
 		if (flightDto.getDepartDate() != null) {

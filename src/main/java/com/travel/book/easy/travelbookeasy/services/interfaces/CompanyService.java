@@ -24,4 +24,7 @@ public interface CompanyService {
 
 	CompanyDto uploadCompanyLogo(MultipartFile logo , long airlineId) throws IOException;
 
+	List<CompanyDto> getAllCompanyOrderByRating();
+
+	CompanyDto updateComany(long companyId, String name);
 }

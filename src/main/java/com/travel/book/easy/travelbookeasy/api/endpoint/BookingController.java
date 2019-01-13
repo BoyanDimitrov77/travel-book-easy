@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.travel.book.easy.travelbookeasy.api.dto.BasicDto;
 import com.travel.book.easy.travelbookeasy.api.dto.BusDto;
 import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
 import com.travel.book.easy.travelbookeasy.api.dto.HotelBookingDto;
@@ -22,6 +23,7 @@ import com.travel.book.easy.travelbookeasy.api.dto.PassengerTicketDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TrainDto;
 import com.travel.book.easy.travelbookeasy.api.dto.TransportBookingDto;
 import com.travel.book.easy.travelbookeasy.services.interfaces.BookingService;
+import com.travel.book.easy.travelbookeasy.services.interfaces.BraintreeService;
 import com.travel.book.easy.travelbookeasy.util.UserUtil;
 
 @RestController
@@ -30,7 +32,10 @@ public class BookingController {
 
 	@Autowired
 	private BookingService bookingService;
-	
+
+	@Autowired
+	private BraintreeService braintreenService;
+
 	@RequestMapping(method = RequestMethod.POST, value = "/bookFlight/{flightId}")
 	@Transactional
 	public ResponseEntity<TransportBookingDto<FlightDto>> bookFlight(@PathVariable("flightId") long flightId,
@@ -153,6 +158,14 @@ public class BookingController {
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/clientToken")
+	@Transactional
+	public ResponseEntity<BasicDto<String>> getGeneratedClientToken() {
+		BasicDto<String> clientToken = new BasicDto<String>(braintreenService.generateClientToken());
+
+		return new ResponseEntity<>(clientToken, HttpStatus.OK);
 	}
 
 }

@@ -5,4 +5,6 @@ import java.math.BigDecimal;
 public interface BraintreeService {
 
 	boolean createTransaction(BigDecimal amount, String nonceFromTheClient);
+
+	String generateClientToken();
 }

@@ -3,7 +3,9 @@ package com.travel.book.easy.travelbookeasy.services.impl;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +154,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		VerificationToken newToken = verificationTokenService.generateTokenForUser(user);
-		String url = verificationTokenService.urlFromToken(newToken);
+		String url = verificationTokenService.urlFromToken(newToken.getToken());
 
 		mailService.sendEmailResetPassord(user.getEmail(), url);
 
@@ -256,6 +258,22 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		return accessTokenGD;
+	}
+
+	@Override
+	public List<UserDto> getAllUsers() {
+		return userRepository.findAll().stream().map(user->UserDto.of(user)).collect(Collectors.toList());
+	}
+
+	@Override
+	public UserDto enableUser(Boolean enabled, long userId) {
+
+		User user = userRepository.findById(userId);
+		user.setEnabled(enabled);
+
+		User savedUser = userRepository.saveAndFlush(user);
+
+		return UserDto.of(savedUser);
 	}
 
 }

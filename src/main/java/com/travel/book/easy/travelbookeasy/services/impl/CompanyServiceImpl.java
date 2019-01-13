@@ -95,7 +95,9 @@ public class CompanyServiceImpl implements CompanyService {
 		
 		Company savedCompany = companyRepository.saveAndFlush(company.get());
 		
-		return CompanyDto.of(savedCompany);
+		Optional<UserCompanyRating> isCurrentUserVotted = savedCompany.getUserCompanyRatings().stream().filter(ucr->ucr.getId().getUser().getId()==userId).findFirst();
+		
+		return CompanyDto.of(savedCompany,isCurrentUserVotted.isPresent());
 	}
 
 	private BigDecimal calculateWeightedRating(long companyId) {
@@ -103,7 +105,7 @@ public class CompanyServiceImpl implements CompanyService {
 		// weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
 
 		// m
-		int minimumVotesRequired = 50;
+		int minimumVotesRequired = 10;
 		List<UserCompanyRating> ratingRecordsForCompany = userCompanyRatingRepository.findAll().stream()
 				.filter(ucr -> ucr.getId().getCompany().getId() == companyId).collect(Collectors.toList());
 		// v
@@ -143,7 +145,7 @@ public class CompanyServiceImpl implements CompanyService {
 		if(!company.isPresent()) {
 			throw new ApiException("Company not found");
 		}
-		
+
 		Optional<UserCompanyRating> isCurrentUserVotted = company.get().getUserCompanyRatings().stream().filter(ucr->ucr.getId().getUser().getId()==userId).findFirst();
 
 		return CompanyDto.of(company.get(),isCurrentUserVotted.isPresent());
@@ -246,6 +248,29 @@ public class CompanyServiceImpl implements CompanyService {
 
 		return savedCompany;
 
+	}
+
+	@Override
+	public List<CompanyDto> getAllCompanyOrderByRating() {
+
+		return companyRepository.findAllCompanyOrderByRating().stream().map(c -> CompanyDto.of(c))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public CompanyDto updateComany(long companyId, String name) {
+
+		Optional<Company> company = companyRepository.findById(companyId);
+
+		if (!company.isPresent()) {
+			throw new ApiException("Company not found");
+		}
+
+		company.get().setName(name);
+
+		Company savedCompany = companyRepository.saveAndFlush(company.get());
+
+		return CompanyDto.of(savedCompany);
 	}
 
 }

@@ -106,4 +106,23 @@ public class CompanyController {
 		return new ResponseEntity<>(companyDto, HttpStatus.OK);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/allCompanyOrderByRating")
+	@Transactional
+	public ResponseEntity<List<CompanyDto>> getAllCompanyOrderByRating() {
+
+		List<CompanyDto> dto = companyService.getAllCompanyOrderByRating();
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/updateCompany/{companyId}")
+	@Transactional
+	public ResponseEntity<CompanyDto> updateCompany(@PathVariable(name = "companyId") long companyId,
+			@RequestParam("name") String name) {
+
+		CompanyDto dto = companyService.updateComany(companyId, name);
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
 }

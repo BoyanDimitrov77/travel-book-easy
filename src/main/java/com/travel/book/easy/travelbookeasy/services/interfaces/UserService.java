@@ -2,6 +2,7 @@ package com.travel.book.easy.travelbookeasy.services.interfaces;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,4 +41,8 @@ public interface UserService {
 	boolean checkIfUsernameExist(String username);
 
 	String getAccessTokenGD();
+
+	List<UserDto> getAllUsers();
+
+	UserDto enableUser(Boolean isEnabled, long userId);
 }

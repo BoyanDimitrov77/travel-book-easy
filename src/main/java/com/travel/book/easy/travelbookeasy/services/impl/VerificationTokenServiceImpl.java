@@ -40,6 +40,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Value("${server.servlet.contextPath}")
     private String restUrl;
 
+	@Value("${application.url.reset.password}")
+	private String resetUrlForPassword;
+
     private final static String mailUrl = "http://localhost:8080/api/v1/verification";
 
 
@@ -96,6 +99,15 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         builder.append(mailUrl);
         builder.append(type);
         builder.append("?token=");
+        builder.append(token);
+        return builder.toString();
+    }
+
+    @Override
+    public String urlFromToken(String token){
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(resetUrlForPassword);
         builder.append(token);
         return builder.toString();
     }

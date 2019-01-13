@@ -46,7 +46,15 @@ public class BraintreeServiceImpl implements BraintreeService{
 
 		return result.isSuccess();
 	}
-	
-	
-	
+
+	@Override
+	public String generateClientToken() {
+
+		BraintreeGateway gateway = new BraintreeGateway(Environment.SANDBOX, merchant_id, public_key, private_key);
+
+		String clientToken = gateway.clientToken().generate();
+
+		return clientToken;
+	}
+
 }

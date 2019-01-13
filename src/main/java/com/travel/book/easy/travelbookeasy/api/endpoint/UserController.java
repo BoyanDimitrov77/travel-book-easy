@@ -1,6 +1,7 @@
 package com.travel.book.easy.travelbookeasy.api.endpoint;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.travel.book.easy.travelbookeasy.api.common.ApiException;
 import com.travel.book.easy.travelbookeasy.api.dto.BasicDto;
 import com.travel.book.easy.travelbookeasy.api.dto.ChangeUserPasswordDto;
-import com.travel.book.easy.travelbookeasy.api.dto.PictureDto;
+import com.travel.book.easy.travelbookeasy.api.dto.FlightDto;
+import com.travel.book.easy.travelbookeasy.api.dto.TransportBookingDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UpdateUserInformationDto;
 import com.travel.book.easy.travelbookeasy.api.dto.UserDto;
+import com.travel.book.easy.travelbookeasy.services.interfaces.BookingService;
 import com.travel.book.easy.travelbookeasy.services.interfaces.UserService;
 import com.travel.book.easy.travelbookeasy.util.UserUtil;
 
@@ -31,7 +34,10 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
+	@Autowired
+	private BookingService bookingService;
+
 	@RequestMapping(method = RequestMethod.GET,value="/hello")
 	public String helloTest(SecurityContextHolder contex){
 		
@@ -52,18 +58,18 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/uploadProfilePhoto")
-	public ResponseEntity<PictureDto> uploadProfilePhoto(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<UserDto> uploadProfilePhoto(@RequestParam("file") MultipartFile file,
 			SecurityContextHolder context) {
 
-		PictureDto profilePicture = null;
+		UserDto userDto = null;
 		try {
-			profilePicture = userService.uploadProfilePhoto(file, UserUtil.gerUserFromContext()).getProfilePicture();
+			userDto =  userService.uploadProfilePhoto(file, UserUtil.gerUserFromContext());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return new ResponseEntity<>(profilePicture, HttpStatus.OK);
+		return new ResponseEntity<>(userDto, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/updatePersonalInformation")
@@ -102,6 +108,32 @@ public class UserController {
 	public ResponseEntity<BasicDto<String>> getAccessTokenGD() {
 
 		return new ResponseEntity<>(new BasicDto<>(userService.getAccessTokenGD()), HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/all")
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+
+		List<UserDto> allUsers = userService.getAllUsers();
+
+		return new ResponseEntity<>(allUsers, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/enableUser/{userId}")
+	public ResponseEntity<UserDto> enableUser(@PathVariable("userId") long userId,
+			@RequestParam("enabled") String enabled) {
+
+		UserDto dto = userService.enableUser(Boolean.valueOf(enabled), userId);
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/allFlightBookings")
+	public ResponseEntity<List<TransportBookingDto<FlightDto>>> getAllFlightBookings(SecurityContextHolder contex) {
+
+		List<TransportBookingDto<FlightDto>> dto = bookingService
+				.findAllUserBooking(UserUtil.gerUserFromContext().getId());
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 }
